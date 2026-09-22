@@ -23,19 +23,22 @@ export function CaptureStage({
   ];
 
   return (
-    <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+    <div className="ops-grid flex-1 flex flex-col md:flex-row overflow-hidden">
       {/* ── Left action console ── */}
-      <aside className="w-full md:w-[40%] bg-surface-container-low border-b md:border-b-0 md:border-r border-outline-variant flex flex-col p-6 gap-6 overflow-y-auto">
+      <aside className="w-full md:w-[38%] bg-surface-container-low/95 border-b md:border-b-0 md:border-r border-outline-variant flex flex-col p-6 gap-6 overflow-y-auto">
         {/* Status ticker (inline) */}
-        <div className="bg-primary-container text-on-primary-container px-4 py-3 rounded flex items-center gap-2 font-mono text-xs font-bold tracking-widest">
+        <div className="border border-status-warn/40 bg-status-warn/10 text-status-warn px-4 py-3 flex items-center gap-2 font-mono text-xs font-bold tracking-widest">
           <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
             warning
           </span>
-          STATUS: AWAITING DOCUMENT
+          NEW VERIFICATION CASE / AWAITING DOCUMENT
         </div>
 
         <div>
-          <h2 className="text-[18px] font-semibold text-on-surface mb-1">Select Document Type</h2>
+          <p className="ops-label text-primary">Document signal intake</p>
+          <h2 className="mt-2 text-xl font-semibold text-on-surface mb-1">
+            Start a verification case
+          </h2>
           <p className="text-sm text-on-surface-variant">
             Optional — the engine auto-detects. Pre-select to guide extraction.
           </p>
@@ -46,7 +49,7 @@ export function CaptureStage({
             <button
               key={d.key}
               onClick={() => setDocType(d.key === docType ? null : d.key)}
-              className={`flex items-center gap-4 px-4 py-4 rounded border transition-all min-h-[48px] ${
+              className={`flex items-center gap-4 px-4 py-4 border transition-all min-h-[48px] ${
                 docType === d.key
                   ? "bg-surface-container-high border-primary-container text-primary"
                   : "bg-surface-container border-outline-variant text-on-surface hover:bg-surface-container-high"
@@ -68,26 +71,35 @@ export function CaptureStage({
           ))}
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] font-mono text-on-surface-variant">
-          <span
-            className={`w-2 h-2 rounded-full ${modelReady ? "bg-status-pass" : "bg-status-warn"}`}
-          />
-          {modelReady ? "ENGINE READY" : "ENGINE LOADING…"}
+        <div className="border-t border-outline-variant pt-4 text-[11px] font-mono text-on-surface-variant">
+          <p className="ops-label mb-2">Trust context</p>
+          <p className="flex items-center gap-2">
+            <span
+              className={`w-2 h-2 rounded-full ${modelReady ? "bg-status-pass" : "bg-status-warn"}`}
+            />
+            {modelReady ? "ENGINE READY" : "ENGINE LOADING…"}
+          </p>
+          <p className="mt-2 text-xs text-on-surface-variant">
+            Authority gateway: <span className="text-status-warn">NOT CONFIGURED</span>
+          </p>
+          <p className="mt-1 text-xs text-on-surface-variant">
+            Device signing: ECDSA P-256 path available when enrolled
+          </p>
         </div>
       </aside>
 
       {/* ── Right capture area ── */}
-      <section className="flex-1 bg-background p-6 flex flex-col items-center justify-center gap-6 relative">
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-surface-container border border-outline-variant px-6 py-2 rounded-full shadow-lg z-10">
-          <p className="text-sm text-on-surface text-center">
-            Place document flat · fill the frame · avoid glare
+      <section className="flex-1 bg-background/80 p-6 flex flex-col items-center justify-center gap-6 relative">
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 border border-outline-variant bg-surface-container px-6 py-2 z-10">
+          <p className="font-mono text-[11px] text-on-surface-variant text-center uppercase tracking-wider">
+            Document input / fill frame / avoid glare
           </p>
         </div>
 
         {/* Capture box */}
         <button
           onClick={onCamera}
-          className="group relative w-full max-w-sm aspect-[3/4] border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center bg-surface-container/30 hover:border-primary-container hover:bg-surface-container/50 transition-all overflow-hidden"
+          className="group relative w-full max-w-sm aspect-[3/4] border-2 border-dashed border-outline-variant flex flex-col items-center justify-center bg-surface-container/30 hover:border-primary-container hover:bg-surface-container/50 transition-all overflow-hidden"
         >
           {/* Corner markers */}
           {[
@@ -100,15 +112,17 @@ export function CaptureStage({
           ))}
 
           <div
-            className="bg-primary-container text-on-primary-container p-4 rounded-full mb-4 group-hover:scale-110 transition-transform"
+            className="bg-primary-container text-on-primary-container p-4 mb-4 group-hover:scale-110 transition-transform"
             style={{ boxShadow: "0 0 20px rgba(245,158,11,0.4)" }}
           >
             <span className="material-symbols-outlined ms-fill" style={{ fontSize: 40 }}>
               photo_camera
             </span>
           </div>
-          <h3 className="text-[18px] font-semibold text-on-surface tracking-wide">SCAN DOCUMENT</h3>
-          <p className="text-xs text-on-surface-variant mt-1">Tap to open camera</p>
+          <h3 className="text-[18px] font-semibold text-on-surface tracking-wide">
+            CAPTURE DOCUMENT
+          </h3>
+          <p className="text-xs text-on-surface-variant mt-1">Open camera for live intake</p>
 
           {/* Scan line animation (shows on hover) */}
           <div className="scan-line opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -116,7 +130,7 @@ export function CaptureStage({
 
         <button
           onClick={onUpload}
-          className="text-sm text-on-surface-variant border border-outline-variant px-5 py-2.5 rounded hover:bg-surface-container transition-colors"
+          className="text-sm text-on-surface-variant border border-outline-variant px-5 py-2.5 hover:bg-surface-container transition-colors"
         >
           Upload image instead
         </button>

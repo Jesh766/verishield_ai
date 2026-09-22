@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CasesRouteImport } from './routes/cases'
+import { Route as DevicesRouteImport } from './routes/devices'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as SessionIdRouteImport } from './routes/session.$id'
@@ -29,6 +30,11 @@ const AdminRoute = AdminRouteImport.update({
 const CasesRoute = CasesRouteImport.update({
   id: '/cases',
   path: '/cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevicesRoute = DevicesRouteImport.update({
+  id: '/devices',
+  path: '/devices',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/cases': typeof CasesRoute
+  '/devices': typeof DevicesRoute
   '/history': typeof HistoryRoute
   '/intelligence': typeof IntelligenceRoute
   '/session/$id': typeof SessionIdRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/cases': typeof CasesRoute
+  '/devices': typeof DevicesRoute
   '/history': typeof HistoryRoute
   '/intelligence': typeof IntelligenceRoute
   '/session/$id': typeof SessionIdRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/cases': typeof CasesRoute
+  '/devices': typeof DevicesRoute
   '/history': typeof HistoryRoute
   '/intelligence': typeof IntelligenceRoute
   '/session/$id': typeof SessionIdRoute
@@ -75,14 +84,28 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/admin' | '/cases' | '/history' | '/intelligence' | '/session/$id'
+    | '/'
+    | '/admin'
+    | '/cases'
+    | '/devices'
+    | '/history'
+    | '/intelligence'
+    | '/session/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/cases' | '/history' | '/intelligence' | '/session/$id'
+  to:
+    | '/'
+    | '/admin'
+    | '/cases'
+    | '/devices'
+    | '/history'
+    | '/intelligence'
+    | '/session/$id'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/cases'
+    | '/devices'
     | '/history'
     | '/intelligence'
     | '/session/$id'
@@ -92,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   CasesRoute: typeof CasesRoute
+  DevicesRoute: typeof DevicesRoute
   HistoryRoute: typeof HistoryRoute
   IntelligenceRoute: typeof IntelligenceRoute
   SessionIdRoute: typeof SessionIdRoute
@@ -118,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/cases'
       fullPath: '/cases'
       preLoaderRoute: typeof CasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devices': {
+      id: '/devices'
+      path: '/devices'
+      fullPath: '/devices'
+      preLoaderRoute: typeof DevicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -148,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   CasesRoute: CasesRoute,
+  DevicesRoute: DevicesRoute,
   HistoryRoute: HistoryRoute,
   IntelligenceRoute: IntelligenceRoute,
   SessionIdRoute: SessionIdRoute,

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AlertTriangle, ArrowLeft, ClipboardList, Search, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
+import { OperationsShell } from "@/components/verishield/OperationsShell";
 import { listSessions, type StoredSession } from "@/lib/verishield";
 
 export const Route = createFileRoute("/cases")({
@@ -24,51 +25,8 @@ function CasesPage() {
   });
 
   return (
-    <main className="min-h-dvh bg-background text-on-surface font-sans">
-      <header className="border-b border-outline-variant bg-surface-container-low px-5 py-4">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              to="/"
-              aria-label="Back to officer workstation"
-              className="text-on-surface-variant hover:text-on-surface"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-            <div>
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-                VeriShield / Operations
-              </p>
-              <h1 className="text-xl font-bold tracking-tight">Case Investigation</h1>
-            </div>
-          </div>
-          <nav
-            className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider"
-            aria-label="Operations navigation"
-          >
-            <Link
-              to="/"
-              className="rounded px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
-            >
-              Verify
-            </Link>
-            <Link
-              to="/admin"
-              className="rounded px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
-            >
-              Command center
-            </Link>
-            <Link
-              to="/history"
-              className="rounded px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
-            >
-              History
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <div className="mx-auto grid max-w-7xl gap-6 px-5 py-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <OperationsShell active="Cases" title="Case Investigation" eyebrow="Evidence-led review queue">
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section>
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
@@ -196,6 +154,6 @@ function CasesPage() {
           </div>
         </aside>
       </div>
-    </main>
+    </OperationsShell>
   );
 }

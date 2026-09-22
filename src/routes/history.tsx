@@ -24,6 +24,7 @@ import {
 } from "@/lib/analytics";
 import { DOC_LABEL } from "@/lib/engine/extract";
 import { LanguageSelector } from "@/lib/i18n";
+import { OperationsShell } from "@/components/verishield/OperationsShell";
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -161,32 +162,13 @@ function HistoryPage() {
   ];
 
   return (
-    <div className="min-h-dvh bg-background text-on-surface font-sans flex flex-col">
-      {/* Header */}
-      <header className="border-b border-outline-variant px-6 h-14 flex items-center justify-between shrink-0 bg-surface-container-low">
-        <div className="flex items-center gap-3">
-          <Link
-            to="/"
-            className="flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span className="font-mono text-xs font-semibold">FIELD OPS</span>
-          </Link>
-          <span className="text-on-surface-variant/40">|</span>
-          <span className="font-bold text-on-surface">Screening History</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <LanguageSelector />
-          <Link
-            to="/admin"
-            className="text-xs font-mono font-semibold text-primary hover:underline px-2 py-1 bg-surface-container rounded border border-outline-variant"
-          >
-            HQ Admin
-          </Link>
-        </div>
-      </header>
-
-      <main className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+    <OperationsShell
+      active="Audit"
+      title="Audit & Screening History"
+      eyebrow="Derived evidence ledger"
+      officer={officer}
+    >
+      <main className="mx-auto flex w-full max-w-7xl flex-col gap-6">
         {/* Officer context */}
         {officer && (
           <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant">
@@ -457,6 +439,6 @@ function HistoryPage() {
           and derived evidence from the local ledger.
         </p>
       </main>
-    </div>
+    </OperationsShell>
   );
 }

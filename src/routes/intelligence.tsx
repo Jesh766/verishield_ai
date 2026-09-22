@@ -8,6 +8,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { useMemo } from "react";
+import { OperationsShell } from "@/components/verishield/OperationsShell";
 import { listSessions } from "@/lib/verishield";
 
 export const Route = createFileRoute("/intelligence")({
@@ -51,45 +52,12 @@ function IntelligencePage() {
     .slice(0, 8);
 
   return (
-    <main className="min-h-dvh bg-background text-on-surface font-sans">
-      <header className="border-b border-outline-variant bg-surface-container-low px-5 py-4">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              to="/"
-              aria-label="Back to officer workstation"
-              className="text-on-surface-variant hover:text-on-surface"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-            <div>
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-                VeriShield / Analysis
-              </p>
-              <h1 className="text-xl font-bold tracking-tight">Fraud Intelligence</h1>
-            </div>
-          </div>
-          <nav
-            className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider"
-            aria-label="Operations navigation"
-          >
-            <Link
-              to="/cases"
-              className="rounded px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
-            >
-              Cases
-            </Link>
-            <Link
-              to="/admin"
-              className="rounded px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
-            >
-              Command center
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-7xl space-y-6 px-5 py-6">
+    <OperationsShell
+      active="Intelligence"
+      title="Fraud Intelligence"
+      eyebrow="Observed signals / local ledger"
+    >
+      <div className="mx-auto max-w-7xl space-y-6">
         <section className="border border-outline-variant bg-surface-container-low p-5">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
@@ -205,6 +173,6 @@ function IntelligencePage() {
           </aside>
         </div>
       </div>
-    </main>
+    </OperationsShell>
   );
 }

@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Eye, EyeOff, ShieldCheck, Lock } from "lucide-react";
+import { OperationsShell } from "@/components/verishield/OperationsShell";
 import { listSessions, type StoredSession } from "@/lib/engine/ledger";
-import { LanguageSelector, useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "VeriShield AI — HQ Admin Ledger" }] }),
@@ -533,483 +533,464 @@ function AdminPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-background text-on-surface font-sans flex flex-col">
-      <header className="border-b border-outline-variant px-6 h-14 flex items-center justify-between shrink-0 bg-surface-container-low">
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined ms-fill text-primary" style={{ fontSize: 22 }}>
-            admin_panel_settings
-          </span>
-          <span className="font-bold text-on-surface">VeriShield AI — HQ Admin Ledger</span>
-        </div>
-        <div className="flex items-center gap-3">
-          {auditIntegrity && (
-            <span
-              className={`font-mono text-[11px] font-bold px-2.5 py-1 rounded border ${
-                auditIntegrity.status === "VALID"
-                  ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300"
-                  : "bg-rose-950/60 border-rose-500/40 text-rose-300"
-              }`}
-              title={auditIntegrity.detail}
-            >
-              AUDIT CHAIN: {auditIntegrity.status}
-            </span>
-          )}
-          <button
-            onClick={() => void exportReport()}
-            disabled={exporting}
-            className="text-xs font-mono font-semibold text-emerald-400 hover:underline px-2.5 py-1 bg-emerald-950/50 rounded border border-emerald-500/30"
-          >
-            {exporting ? "Exporting..." : "Export Report (JSON)"}
-          </button>
-          <button
-            onClick={() => void verifyAuditChain()}
-            className="text-xs font-mono font-semibold text-primary hover:underline px-2.5 py-1 bg-surface-container rounded border border-outline-variant"
-          >
-            Verify Audit Chain
-          </button>
-          <LanguageSelector />
-          <Link
-            to="/"
-            className="text-xs font-mono font-semibold text-primary hover:underline px-2 py-1 bg-surface-container rounded border border-outline-variant"
-          >
-            ← Officer Workstation
-          </Link>
-          <Link
-            to="/cases"
-            className="text-xs font-mono font-semibold text-primary hover:underline px-2 py-1 bg-surface-container rounded border border-outline-variant"
-          >
-            Cases
-          </Link>
-          <Link
-            to="/intelligence"
-            className="text-xs font-mono font-semibold text-primary hover:underline px-2 py-1 bg-surface-container rounded border border-outline-variant"
-          >
-            Intelligence
-          </Link>
-          <button
-            onClick={() => {
-              if (typeof window !== "undefined") {
-                sessionStorage.removeItem(LS_TOKEN);
-              }
-              setToken(null);
-            }}
-            className="font-mono text-[11px] text-on-surface-variant hover:text-on-surface"
-          >
-            LOG OUT
-          </button>
-        </div>
-      </header>
-
-      <main className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
-        {err && (
-          <div className="px-4 py-3 border border-status-fail/40 bg-[rgba(239,68,68,0.08)] text-status-fail text-sm rounded font-mono">
-            {err}
+    <OperationsShell active="Command Center" title="Command Center" eyebrow="HQ operational ledger">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant pb-4">
+          <div>
+            <p className="ops-label text-primary">Operational status</p>
+            <h2 className="mt-1 text-2xl font-bold">HQ command center</h2>
           </div>
-        )}
-
-        {/* Operational Key Metrics */}
-        {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {[
-              ["Total Sessions", stats.total_sessions],
-              ["Last 24h", stats.last_24h],
-              ["Acceptance Rate", analytics ? `${analytics.acceptance_rate}%` : "—"],
-              ["Avg Risk Score", stats.avg_risk_score ?? "—"],
-              ["Pending Review", stats.pending_review],
-            ].map(([label, val]) => (
-              <div
-                key={label as string}
-                className="bg-surface-container border border-outline-variant rounded-lg p-4"
+          <div className="flex flex-wrap items-center gap-2">
+            {auditIntegrity && (
+              <span
+                className={`font-mono text-[11px] font-bold px-2.5 py-1 rounded border ${
+                  auditIntegrity.status === "VALID"
+                    ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300"
+                    : "bg-rose-950/60 border-rose-500/40 text-rose-300"
+                }`}
+                title={auditIntegrity.detail}
               >
-                <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">
-                  {label}
-                </p>
-                <p className="text-2xl font-bold text-on-surface mt-1">{val}</p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Time-Series Analytics & Observed Evidence Signals */}
-        {analytics && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2 bg-surface-container border border-outline-variant rounded-lg p-4">
-              <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-3">
-                Screening Volume Over Time (Last 14 Days)
-              </p>
-              <TimeSeriesChart data={analytics.screenings_over_time} />
-            </div>
-
-            <div className="bg-surface-container border border-outline-variant rounded-lg p-4 flex flex-col justify-between">
-              <div>
-                <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-2">
-                  Observed Evidence Signals
-                </p>
-                <div className="space-y-1.5 text-xs font-mono">
-                  <div className="flex justify-between">
-                    <span className="text-on-surface-variant">Verhoeff Failures:</span>
-                    <span className="font-bold">
-                      {analytics.evidence_signals.verhoeff_failures}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-on-surface-variant">MRZ Failures:</span>
-                    <span className="font-bold">{analytics.evidence_signals.mrz_failures}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-on-surface-variant">DL Format Anomalies:</span>
-                    <span className="font-bold">
-                      {analytics.evidence_signals.dl_format_failures}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-on-surface-variant">Consistency Failures:</span>
-                    <span className="font-bold">
-                      {analytics.evidence_signals.consistency_failures}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-on-surface-variant">ELA Hotspots (&ge;45):</span>
-                    <span className="font-bold text-status-warn">
-                      {analytics.evidence_signals.ela_hotspots}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-on-surface-variant">Face Mismatches:</span>
-                    <span className="font-bold text-status-fail">
-                      {analytics.evidence_signals.face_mismatches}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <p className="font-mono text-[9px] text-on-surface-variant/60 mt-3">
-                * Operational screening signals derived from local verification metrics. Not
-                authoritative fraud claims.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Operational Distributions */}
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {(
-              [
-                ["By decision", stats.by_decision],
-                ["By risk band", stats.by_band],
-                ["By checkpoint", stats.by_checkpoint],
-              ] as [string, Record<string, number>][]
-            ).map(([title, breakdown]) => (
-              <div
-                key={title}
-                className="bg-surface-container border border-outline-variant rounded-lg p-4"
-              >
-                <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-2">
-                  {title}
-                </p>
-                <div className="flex flex-col gap-1">
-                  {Object.entries(breakdown || {}).map(([k, v]) => (
-                    <div key={k} className="flex justify-between text-sm">
-                      <span className="text-on-surface-variant capitalize">{k}</span>
-                      <span className="font-mono text-on-surface">{v}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Operational Filters */}
-        <div className="flex flex-wrap items-center gap-3">
-          <input
-            type="text"
-            placeholder="Search session ID or officer badge..."
-            value={filters.q}
-            onChange={(e) => setFilters((f) => ({ ...f, q: e.target.value }))}
-            className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
-          />
-          <select
-            value={filters.checkpoint}
-            onChange={(e) => setFilters((f) => ({ ...f, checkpoint: e.target.value }))}
-            className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
-          >
-            <option value="">All Checkpoints</option>
-            {checkpointOptions.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filters.document_type}
-            onChange={(e) => setFilters((f) => ({ ...f, document_type: e.target.value }))}
-            className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
-          >
-            <option value="">All Document Types</option>
-            <option value="aadhaar">Aadhaar</option>
-            <option value="passport">Passport</option>
-            <option value="dl">Driving Licence</option>
-            <option value="visa">Visa</option>
-          </select>
-          <select
-            value={filters.decision}
-            onChange={(e) => setFilters((f) => ({ ...f, decision: e.target.value }))}
-            className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
-          >
-            <option value="">All Decisions</option>
-            <option value="cleared">Cleared</option>
-            <option value="referred">Referred</option>
-            <option value="rejected">Rejected</option>
-          </select>
-          <select
-            value={filters.band}
-            onChange={(e) => setFilters((f) => ({ ...f, band: e.target.value }))}
-            className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
-          >
-            <option value="">All Risk Bands</option>
-            <option value="clear">Clear</option>
-            <option value="review">Review</option>
-            <option value="escalate">Escalate</option>
-          </select>
-          <select
-            value={filters.review_status}
-            onChange={(e) => setFilters((f) => ({ ...f, review_status: e.target.value }))}
-            className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
-          >
-            <option value="">All Review Statuses</option>
-            <option value="OPEN">Open</option>
-            <option value="UNDER_REVIEW">Under Review</option>
-            <option value="CLEARED">Cleared (Ops)</option>
-            <option value="ESCALATED">Escalated</option>
-            <option value="CLOSED">Closed</option>
-          </select>
-        </div>
-
-        {/* Sessions Table & Case Detail Modal */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 border border-outline-variant rounded-lg overflow-hidden bg-surface-container-low">
-            <table className="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr className="border-b border-outline-variant bg-surface-container font-mono text-[10px] text-on-surface-variant uppercase tracking-wider">
-                  <th className="p-3">Session ID</th>
-                  <th className="p-3">Doc</th>
-                  <th className="p-3">Checkpoint</th>
-                  <th className="p-3">Risk Band</th>
-                  <th className="p-3">Decision</th>
-                  <th className="p-3">Review Status</th>
-                  <th className="p-3">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading && (
-                  <tr>
-                    <td
-                      colSpan={7}
-                      className="p-4 text-center text-xs text-on-surface-variant font-mono"
-                    >
-                      Loading sessions...
-                    </td>
-                  </tr>
-                )}
-                {!loading && sessions.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={7}
-                      className="p-4 text-center text-xs text-on-surface-variant font-mono"
-                    >
-                      No sessions found matching current operational filters.
-                    </td>
-                  </tr>
-                )}
-                {sessions.map((s) => (
-                  <tr
-                    key={s.id}
-                    onClick={() => void openSession(s)}
-                    className={`border-b border-outline-variant/50 hover:bg-surface-container cursor-pointer transition-colors ${selected?.id === s.id ? "bg-surface-container" : ""}`}
-                  >
-                    <td className="p-3 font-mono font-bold text-xs">{s.id.slice(0, 14)}...</td>
-                    <td className="p-3 capitalize text-xs">{s.document_type}</td>
-                    <td className="p-3 text-xs">{s.checkpoint || "—"}</td>
-                    <td className="p-3">
-                      {s.risk_band && (
-                        <Pill cls={BAND_COLOR[s.risk_band] ?? ""}>{s.risk_band}</Pill>
-                      )}
-                    </td>
-                    <td className="p-3 text-xs font-bold capitalize">
-                      {s.decision ? (
-                        <span className={DECISION_COLOR[s.decision] ?? ""}>{s.decision}</span>
-                      ) : (
-                        <span className="text-on-surface-variant font-normal">Pending</span>
-                      )}
-                    </td>
-                    <td className="p-3 font-mono text-[10px] font-bold">
-                      <span className="px-2 py-0.5 rounded border border-outline-variant bg-surface-container">
-                        {s.review_status || "OPEN"}
-                      </span>
-                    </td>
-                    <td className="p-3 font-mono text-[11px] text-on-surface-variant">
-                      {new Date(s.created_at).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="flex items-center justify-between font-mono text-xs text-on-surface-variant p-3 border-t border-outline-variant bg-surface-container">
-              <span>
-                Page {page} (Showing {sessions.length} records)
+                AUDIT CHAIN: {auditIntegrity.status}
               </span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="px-3 py-1 rounded border border-outline-variant bg-surface-container-high hover:bg-surface-container-highest disabled:opacity-40 font-semibold"
-                >
-                  ← Previous
-                </button>
-                <button
-                  type="button"
-                  disabled={sessions.length < PAGE_SIZE}
-                  onClick={() => setPage((p) => p + 1)}
-                  className="px-3 py-1 rounded border border-outline-variant bg-surface-container-high hover:bg-surface-container-highest disabled:opacity-40 font-semibold"
-                >
-                  Next →
-                </button>
-              </div>
-            </div>
+            )}
+            <button
+              onClick={() => void exportReport()}
+              disabled={exporting}
+              className="text-xs font-mono font-semibold text-emerald-400 hover:underline px-2.5 py-1 bg-emerald-950/50 rounded border border-emerald-500/30"
+            >
+              {exporting ? "Exporting..." : "Export Report (JSON)"}
+            </button>
+            <button
+              onClick={() => void verifyAuditChain()}
+              className="text-xs font-mono font-semibold text-primary hover:underline px-2.5 py-1 bg-surface-container rounded border border-outline-variant"
+            >
+              Verify Audit Chain
+            </button>
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  sessionStorage.removeItem(LS_TOKEN);
+                }
+                setToken(null);
+              }}
+              className="font-mono text-[11px] text-on-surface-variant hover:text-on-surface"
+            >
+              LOG OUT
+            </button>
           </div>
+        </div>
 
-          {selected && (
-            <div className="border border-outline-variant rounded-lg p-5 bg-surface-container-low flex flex-col gap-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                    Case Review &amp; Detail
-                  </p>
-                  <h3 className="text-lg font-bold text-on-surface font-mono">{selected.id}</h3>
-                </div>
-                <button
-                  onClick={() => setSelected(null)}
-                  className="text-xs text-on-surface-variant hover:text-on-surface font-mono"
-                >
-                  ✕ Close
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-surface-container p-3 rounded">
-                <div>
-                  <span className="text-on-surface-variant uppercase text-[9px] block">
-                    Officer
-                  </span>
-                  {selected.officer_badge || "—"}
-                </div>
-                <div>
-                  <span className="text-on-surface-variant uppercase text-[9px] block">
-                    Checkpoint
-                  </span>
-                  {selected.checkpoint || "—"}
-                </div>
-                <div>
-                  <span className="text-on-surface-variant uppercase text-[9px] block">
-                    OCR Conf.
-                  </span>
-                  {selected.ocr_confidence ? `${selected.ocr_confidence}%` : "—"}
-                </div>
-                <div>
-                  <span className="text-on-surface-variant uppercase text-[9px] block">
-                    Face Score
-                  </span>
-                  {selected.face_match_score ? `${selected.face_match_score}%` : "—"}
-                </div>
-              </div>
-
-              {/* Case Review Workflow UI */}
-              <div className="border border-outline-variant bg-surface-container p-3.5 rounded-lg space-y-3">
-                <p className="font-mono text-[10px] font-bold text-primary uppercase tracking-widest">
-                  Manual Review Workflow
-                </p>
-                <div className="flex flex-col gap-1">
-                  <label className="font-mono text-[10px] text-on-surface-variant">
-                    Review Status:
-                  </label>
-                  <select
-                    value={reviewStatusInput}
-                    onChange={(e) => setReviewStatusInput(e.target.value)}
-                    className="h-9 bg-surface-container-high border border-outline-variant rounded px-2 font-mono text-xs text-on-surface"
-                  >
-                    <option value="OPEN">OPEN (Default Triage)</option>
-                    <option value="UNDER_REVIEW">UNDER REVIEW</option>
-                    <option value="CLEARED">CLEARED FOR OPERATIONAL PURPOSES</option>
-                    <option value="ESCALATED">ESCALATED TO SECONDARY</option>
-                    <option value="CLOSED">CLOSED</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="font-mono text-[10px] text-on-surface-variant">
-                    Supervisor Note (Max 1000 chars):
-                  </label>
-                  <textarea
-                    rows={2}
-                    maxLength={1000}
-                    value={reviewNoteInput}
-                    placeholder="Enter operational case notes..."
-                    onChange={(e) => setReviewNoteInput(e.target.value)}
-                    className="bg-surface-container-high border border-outline-variant rounded p-2 font-mono text-xs text-on-surface resize-none"
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => void saveCaseReview()}
-                  disabled={reviewSaving}
-                  className="w-full h-8 bg-primary text-on-primary font-mono text-xs font-bold rounded uppercase tracking-wider hover:opacity-90 disabled:opacity-50"
-                >
-                  {reviewSaving ? "Saving Review..." : "Update Case Review"}
-                </button>
-              </div>
-
-              {selected.extracted_fields && Object.keys(selected.extracted_fields).length > 0 && (
-                <div>
-                  <p className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">
-                    Masked Fields
-                  </p>
-                  <div className="bg-surface-container p-3 rounded space-y-1 font-mono text-xs">
-                    {Object.entries(selected.extracted_fields).map(([k, v]) => (
-                      <div key={k} className="flex justify-between">
-                        <span className="text-on-surface-variant">{k}:</span>
-                        <span className="font-bold text-on-surface">{v}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {auditLog.length > 0 && (
-                <div>
-                  <p className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">
-                    Audit Log
-                  </p>
-                  <div className="space-y-1 text-xs font-mono">
-                    {auditLog.map((a, i) => (
-                      <div key={i} className="bg-surface-container p-2 rounded">
-                        <span className="font-bold text-primary">{a.action}</span> by {a.actor}
-                        {a.detail && (
-                          <p className="text-[11px] text-on-surface-variant mt-0.5">{a.detail}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+        <main className="flex flex-col gap-6">
+          {err && (
+            <div className="px-4 py-3 border border-status-fail/40 bg-[rgba(239,68,68,0.08)] text-status-fail text-sm rounded font-mono">
+              {err}
             </div>
           )}
-        </div>
-      </main>
-    </div>
+
+          {/* Operational Key Metrics */}
+          {stats && (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {[
+                ["Total Sessions", stats.total_sessions],
+                ["Last 24h", stats.last_24h],
+                ["Acceptance Rate", analytics ? `${analytics.acceptance_rate}%` : "—"],
+                ["Avg Risk Score", stats.avg_risk_score ?? "—"],
+                ["Pending Review", stats.pending_review],
+              ].map(([label, val]) => (
+                <div
+                  key={label as string}
+                  className="bg-surface-container border border-outline-variant rounded-lg p-4"
+                >
+                  <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">
+                    {label}
+                  </p>
+                  <p className="text-2xl font-bold text-on-surface mt-1">{val}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Time-Series Analytics & Observed Evidence Signals */}
+          {analytics && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="md:col-span-2 bg-surface-container border border-outline-variant rounded-lg p-4">
+                <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-3">
+                  Screening Volume Over Time (Last 14 Days)
+                </p>
+                <TimeSeriesChart data={analytics.screenings_over_time} />
+              </div>
+
+              <div className="bg-surface-container border border-outline-variant rounded-lg p-4 flex flex-col justify-between">
+                <div>
+                  <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-2">
+                    Observed Evidence Signals
+                  </p>
+                  <div className="space-y-1.5 text-xs font-mono">
+                    <div className="flex justify-between">
+                      <span className="text-on-surface-variant">Verhoeff Failures:</span>
+                      <span className="font-bold">
+                        {analytics.evidence_signals.verhoeff_failures}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-on-surface-variant">MRZ Failures:</span>
+                      <span className="font-bold">{analytics.evidence_signals.mrz_failures}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-on-surface-variant">DL Format Anomalies:</span>
+                      <span className="font-bold">
+                        {analytics.evidence_signals.dl_format_failures}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-on-surface-variant">Consistency Failures:</span>
+                      <span className="font-bold">
+                        {analytics.evidence_signals.consistency_failures}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-on-surface-variant">ELA Hotspots (&ge;45):</span>
+                      <span className="font-bold text-status-warn">
+                        {analytics.evidence_signals.ela_hotspots}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-on-surface-variant">Face Mismatches:</span>
+                      <span className="font-bold text-status-fail">
+                        {analytics.evidence_signals.face_mismatches}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p className="font-mono text-[9px] text-on-surface-variant/60 mt-3">
+                  * Operational screening signals derived from local verification metrics. Not
+                  authoritative fraud claims.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Operational Distributions */}
+          {stats && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {(
+                [
+                  ["By decision", stats.by_decision],
+                  ["By risk band", stats.by_band],
+                  ["By checkpoint", stats.by_checkpoint],
+                ] as [string, Record<string, number>][]
+              ).map(([title, breakdown]) => (
+                <div
+                  key={title}
+                  className="bg-surface-container border border-outline-variant rounded-lg p-4"
+                >
+                  <p className="font-mono text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-2">
+                    {title}
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    {Object.entries(breakdown || {}).map(([k, v]) => (
+                      <div key={k} className="flex justify-between text-sm">
+                        <span className="text-on-surface-variant capitalize">{k}</span>
+                        <span className="font-mono text-on-surface">{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Operational Filters */}
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              type="text"
+              placeholder="Search session ID or officer badge..."
+              value={filters.q}
+              onChange={(e) => setFilters((f) => ({ ...f, q: e.target.value }))}
+              className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
+            />
+            <select
+              value={filters.checkpoint}
+              onChange={(e) => setFilters((f) => ({ ...f, checkpoint: e.target.value }))}
+              className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
+            >
+              <option value="">All Checkpoints</option>
+              {checkpointOptions.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+            <select
+              value={filters.document_type}
+              onChange={(e) => setFilters((f) => ({ ...f, document_type: e.target.value }))}
+              className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
+            >
+              <option value="">All Document Types</option>
+              <option value="aadhaar">Aadhaar</option>
+              <option value="passport">Passport</option>
+              <option value="dl">Driving Licence</option>
+              <option value="visa">Visa</option>
+            </select>
+            <select
+              value={filters.decision}
+              onChange={(e) => setFilters((f) => ({ ...f, decision: e.target.value }))}
+              className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
+            >
+              <option value="">All Decisions</option>
+              <option value="cleared">Cleared</option>
+              <option value="referred">Referred</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <select
+              value={filters.band}
+              onChange={(e) => setFilters((f) => ({ ...f, band: e.target.value }))}
+              className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
+            >
+              <option value="">All Risk Bands</option>
+              <option value="clear">Clear</option>
+              <option value="review">Review</option>
+              <option value="escalate">Escalate</option>
+            </select>
+            <select
+              value={filters.review_status}
+              onChange={(e) => setFilters((f) => ({ ...f, review_status: e.target.value }))}
+              className="h-10 bg-surface-container border border-outline-variant rounded px-3 text-sm text-on-surface focus:outline-none"
+            >
+              <option value="">All Review Statuses</option>
+              <option value="OPEN">Open</option>
+              <option value="UNDER_REVIEW">Under Review</option>
+              <option value="CLEARED">Cleared (Ops)</option>
+              <option value="ESCALATED">Escalated</option>
+              <option value="CLOSED">Closed</option>
+            </select>
+          </div>
+
+          {/* Sessions Table & Case Detail Modal */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 border border-outline-variant rounded-lg overflow-hidden bg-surface-container-low">
+              <table className="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-outline-variant bg-surface-container font-mono text-[10px] text-on-surface-variant uppercase tracking-wider">
+                    <th className="p-3">Session ID</th>
+                    <th className="p-3">Doc</th>
+                    <th className="p-3">Checkpoint</th>
+                    <th className="p-3">Risk Band</th>
+                    <th className="p-3">Decision</th>
+                    <th className="p-3">Review Status</th>
+                    <th className="p-3">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading && (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="p-4 text-center text-xs text-on-surface-variant font-mono"
+                      >
+                        Loading sessions...
+                      </td>
+                    </tr>
+                  )}
+                  {!loading && sessions.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="p-4 text-center text-xs text-on-surface-variant font-mono"
+                      >
+                        No sessions found matching current operational filters.
+                      </td>
+                    </tr>
+                  )}
+                  {sessions.map((s) => (
+                    <tr
+                      key={s.id}
+                      onClick={() => void openSession(s)}
+                      className={`border-b border-outline-variant/50 hover:bg-surface-container cursor-pointer transition-colors ${selected?.id === s.id ? "bg-surface-container" : ""}`}
+                    >
+                      <td className="p-3 font-mono font-bold text-xs">{s.id.slice(0, 14)}...</td>
+                      <td className="p-3 capitalize text-xs">{s.document_type}</td>
+                      <td className="p-3 text-xs">{s.checkpoint || "—"}</td>
+                      <td className="p-3">
+                        {s.risk_band && (
+                          <Pill cls={BAND_COLOR[s.risk_band] ?? ""}>{s.risk_band}</Pill>
+                        )}
+                      </td>
+                      <td className="p-3 text-xs font-bold capitalize">
+                        {s.decision ? (
+                          <span className={DECISION_COLOR[s.decision] ?? ""}>{s.decision}</span>
+                        ) : (
+                          <span className="text-on-surface-variant font-normal">Pending</span>
+                        )}
+                      </td>
+                      <td className="p-3 font-mono text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded border border-outline-variant bg-surface-container">
+                          {s.review_status || "OPEN"}
+                        </span>
+                      </td>
+                      <td className="p-3 font-mono text-[11px] text-on-surface-variant">
+                        {new Date(s.created_at).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="flex items-center justify-between font-mono text-xs text-on-surface-variant p-3 border-t border-outline-variant bg-surface-container">
+                <span>
+                  Page {page} (Showing {sessions.length} records)
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={page <= 1}
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    className="px-3 py-1 rounded border border-outline-variant bg-surface-container-high hover:bg-surface-container-highest disabled:opacity-40 font-semibold"
+                  >
+                    ← Previous
+                  </button>
+                  <button
+                    type="button"
+                    disabled={sessions.length < PAGE_SIZE}
+                    onClick={() => setPage((p) => p + 1)}
+                    className="px-3 py-1 rounded border border-outline-variant bg-surface-container-high hover:bg-surface-container-highest disabled:opacity-40 font-semibold"
+                  >
+                    Next →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {selected && (
+              <div className="border border-outline-variant rounded-lg p-5 bg-surface-container-low flex flex-col gap-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                      Case Review &amp; Detail
+                    </p>
+                    <h3 className="text-lg font-bold text-on-surface font-mono">{selected.id}</h3>
+                  </div>
+                  <button
+                    onClick={() => setSelected(null)}
+                    className="text-xs text-on-surface-variant hover:text-on-surface font-mono"
+                  >
+                    ✕ Close
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-surface-container p-3 rounded">
+                  <div>
+                    <span className="text-on-surface-variant uppercase text-[9px] block">
+                      Officer
+                    </span>
+                    {selected.officer_badge || "—"}
+                  </div>
+                  <div>
+                    <span className="text-on-surface-variant uppercase text-[9px] block">
+                      Checkpoint
+                    </span>
+                    {selected.checkpoint || "—"}
+                  </div>
+                  <div>
+                    <span className="text-on-surface-variant uppercase text-[9px] block">
+                      OCR Conf.
+                    </span>
+                    {selected.ocr_confidence ? `${selected.ocr_confidence}%` : "—"}
+                  </div>
+                  <div>
+                    <span className="text-on-surface-variant uppercase text-[9px] block">
+                      Face Score
+                    </span>
+                    {selected.face_match_score ? `${selected.face_match_score}%` : "—"}
+                  </div>
+                </div>
+
+                {/* Case Review Workflow UI */}
+                <div className="border border-outline-variant bg-surface-container p-3.5 rounded-lg space-y-3">
+                  <p className="font-mono text-[10px] font-bold text-primary uppercase tracking-widest">
+                    Manual Review Workflow
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    <label className="font-mono text-[10px] text-on-surface-variant">
+                      Review Status:
+                    </label>
+                    <select
+                      value={reviewStatusInput}
+                      onChange={(e) => setReviewStatusInput(e.target.value)}
+                      className="h-9 bg-surface-container-high border border-outline-variant rounded px-2 font-mono text-xs text-on-surface"
+                    >
+                      <option value="OPEN">OPEN (Default Triage)</option>
+                      <option value="UNDER_REVIEW">UNDER REVIEW</option>
+                      <option value="CLEARED">CLEARED FOR OPERATIONAL PURPOSES</option>
+                      <option value="ESCALATED">ESCALATED TO SECONDARY</option>
+                      <option value="CLOSED">CLOSED</option>
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="font-mono text-[10px] text-on-surface-variant">
+                      Supervisor Note (Max 1000 chars):
+                    </label>
+                    <textarea
+                      rows={2}
+                      maxLength={1000}
+                      value={reviewNoteInput}
+                      placeholder="Enter operational case notes..."
+                      onChange={(e) => setReviewNoteInput(e.target.value)}
+                      className="bg-surface-container-high border border-outline-variant rounded p-2 font-mono text-xs text-on-surface resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => void saveCaseReview()}
+                    disabled={reviewSaving}
+                    className="w-full h-8 bg-primary text-on-primary font-mono text-xs font-bold rounded uppercase tracking-wider hover:opacity-90 disabled:opacity-50"
+                  >
+                    {reviewSaving ? "Saving Review..." : "Update Case Review"}
+                  </button>
+                </div>
+
+                {selected.extracted_fields && Object.keys(selected.extracted_fields).length > 0 && (
+                  <div>
+                    <p className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">
+                      Masked Fields
+                    </p>
+                    <div className="bg-surface-container p-3 rounded space-y-1 font-mono text-xs">
+                      {Object.entries(selected.extracted_fields).map(([k, v]) => (
+                        <div key={k} className="flex justify-between">
+                          <span className="text-on-surface-variant">{k}:</span>
+                          <span className="font-bold text-on-surface">{v}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {auditLog.length > 0 && (
+                  <div>
+                    <p className="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">
+                      Audit Log
+                    </p>
+                    <div className="space-y-1 text-xs font-mono">
+                      {auditLog.map((a, i) => (
+                        <div key={i} className="bg-surface-container p-2 rounded">
+                          <span className="font-bold text-primary">{a.action}</span> by {a.actor}
+                          {a.detail && (
+                            <p className="text-[11px] text-on-surface-variant mt-0.5">{a.detail}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    </OperationsShell>
   );
 }
