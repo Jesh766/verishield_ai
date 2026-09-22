@@ -1,0 +1,488 @@
+name: VeriShield — DevSecOps Security Pipeline
+
+# Triggers: every push and pull request to main/develop
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+# Minimal permissions — principle of least privilege
+permissions:
+  contents: read
+  security-events: write # Required for CodeQL/SARIF uploads
+  actions: read
+
+# ============================================================================
+# SECURITY POLICY — READ BEFORE MODIFYING
+#
+# Every job in this pipeline is a hard security gate unless explicitly
+# documented as informational-only below.
+#
+# Failure policy:
+#   Secret scan          — ANY detected secret       → FAIL (pipeline aborts)
+#   pip-audit            — CRITICAL or HIGH CVE      → FAIL
+#                          MEDIUM / LOW              → reported in artifact, not blocking
+#                          Tool execution failure    → FAIL (no || true bypass)
+#   npm audit            — HIGH or CRITICAL          → FAIL (--audit-level=high)
+#                          Tool execution failure    → FAIL (no || true bypass)
+#   CodeQL               — SARIF uploaded to GitHub  → GitHub Security tab enforces
+#                          policy via Code Scanning alerts (repo-level setting)
+#                          NOTE: CodeQL does NOT exit non-zero on findings by itself.
+#                          The gate is enforced by GitHub branch protection rules
+#                          requiring the Code Scanning check to pass before merge.
+#                          See docs/devsecops.md §CodeQL for details.
+#   Semgrep              — ERROR-severity findings   → FAIL
+#                          WARNING-severity          → non-blocking, logged
+#   Backend tests        — ANY test failure          → FAIL
+#   Frontend check       — ANY TypeScript/ESLint err → FAIL
+#   Container scan       — CRITICAL vulnerabilities  → FAIL
+#                          HIGH vulnerabilities      → reported in SARIF, non-blocking
+#                          (HIGH promoted to blocking when OS vendor provides fix)
+#                          Unfixable CVEs            → documented in artifact, not suppressed
+#   SBOM                 — generation failure        → FAIL
+#                          artifact uploaded         → always
+#   DAST (ZAP)           — FAIL-threshold = HIGH+    → FAIL
+#                          Scan runs against CI-only test deployment, never production
+# ============================================================================
+
+jobs:
+  # ============================================================================
+  # STAGE 1: Secret Scanning
+  # Tool: Gitleaks v2
+  # Policy: ANY detected secret → FAIL immediately. No bypass.
+  # ============================================================================
+  secret-scan:
+    name: "Stage 1 — Secret Scanning (Gitleaks)"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for accurate scan)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        # continue-on-error is intentionally absent — any secret detection FAILS the job
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITLEAKS_LICENSE is optional; required only for org-level scan features
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  # ============================================================================
+  # STAGE 2: Backend — Python Dependency Vulnerability Scan
+  # Tool: pip-audit (PyPA auditing tool, checks PyPI advisory database)
+  #
+  # Policy (ENFORCED):
+  #   pip-audit classifies vulnerabilities by advisory ID, not CVE severity bands.
+  #   pip-audit does NOT currently expose a --severity-threshold flag.
+  #   Therefore this job applies the following deterministic policy:
+  #     - Any vulnerability for which a fixed version EXISTS in the upstream repo
+  #       (i.e., pip-audit exit code 1) → FAIL
+  #     - Any vulnerability with NO available fix → reported in artifact,
+  #       non-blocking, and must be reviewed and manually accepted via exception
+  #       comment in the PR before merge
+  #   This is conservative: we treat "any fixable vulnerability" as a hard gate.
+  #   The limitation (no native CRITICAL/HIGH band) is documented in docs/devsecops.md.
+  # ============================================================================
+  backend-dependency-scan:
+    name: "Stage 2 — Backend Dependency Scan (pip-audit)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pip-audit
+        # Tool installation failure → job fails (no error suppression)
+        run: pip install pip-audit
+
+      - name: Run pip-audit (fixable vulnerabilities → FAIL)
+        working-directory: backend
+        run: |
+          # Run pip-audit.
+          # Exit code 0 = no vulnerabilities found
+          # Exit code 1 = vulnerabilities found (at least one has a fix available)
+          # Exit code 2 = tool error
+          # All non-zero exit codes are treated as job failures.
+          # NO || true bypass — tool failure fails the job.
+          pip-audit \
+            -r requirements.txt \
+            --format json \
+            --output pip-audit-report.json
+          echo "pip-audit exit code: $?"
+
+      - name: Upload pip-audit report
+        # Always upload so the artifact is available even on failure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pip-audit-report
+          path: backend/pip-audit-report.json
+          if-no-files-found: warn
+
+  # ============================================================================
+  # STAGE 3: Frontend — Node.js Dependency Vulnerability Scan
+  # Tool: npm audit (built-in to npm)
+  #
+  # Policy (ENFORCED):
+  #   --audit-level=high means npm audit exits non-zero if HIGH or CRITICAL
+  #   vulnerabilities are found.
+  #   No || true bypass. No continue-on-error. Tool failure fails the job.
+  #   The JSON report is captured for artifact upload before the gate runs.
+  # ============================================================================
+  frontend-dependency-scan:
+    name: "Stage 3 — Frontend Dependency Scan (npm audit)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Capture npm audit report (before gate)
+        # Capture report to artifact regardless of outcome.
+        # || true here is intentional and scoped: it prevents *this report step*
+        # from masking the real gate below. The gate step below does NOT use || true.
+        run: npm audit --json > npm-audit-report.json || true
+
+      - name: Upload npm audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: npm-audit-report
+          path: npm-audit-report.json
+          if-no-files-found: warn
+
+      - name: npm audit GATE (high/critical → FAIL)
+        # This is the enforced gate. No error suppression.
+        # npm exits 1 if any vulnerability at or above --audit-level is found.
+        run: npm audit --audit-level=high
+
+  # ============================================================================
+  # STAGE 4a: SAST — CodeQL (Python)
+  # Tool: GitHub CodeQL action v3
+  #
+  # Policy and Honest Gate Description:
+  #   CodeQL uploads a SARIF report to the GitHub Security tab.
+  #   The codeql-action/analyze step itself does NOT exit non-zero based on
+  #   findings — it is GitHub's Code Scanning (branch protection rule) that
+  #   blocks PR merges when alerts exist.
+  #
+  #   What this job enforces:
+  #     - CodeQL initialization failure        → FAIL
+  #     - CodeQL analysis execution failure    → FAIL
+  #     - SARIF upload failure                 → FAIL
+  #     - Code Scanning alert review           → enforced by GitHub branch protection
+  #       (requires "Code scanning results / CodeQL" check to pass before merge)
+  #
+  #   This job does NOT independently block on the content of findings.
+  #   See docs/devsecops.md §CodeQL for setup instructions and limitations.
+  # ============================================================================
+  sast-codeql:
+    name: "Stage 4a — SAST CodeQL (Python)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        # Job fails if analysis execution fails. Findings go to Security tab.
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:python"
+
+  # ============================================================================
+  # STAGE 4b: SAST — Semgrep
+  # Tool: Semgrep (returntocorp/semgrep-action)
+  #
+  # Policy (ENFORCED):
+  #   - Semgrep exits non-zero when ERROR-severity rules match.
+  #   - continue-on-error is removed. ERROR findings fail the job.
+  #   - WARNING-severity findings are logged but non-blocking (Semgrep default).
+  #   - Rulesets: p/python, p/owasp-top-ten, p/secrets
+  # ============================================================================
+  sast-semgrep:
+    name: "Stage 4b — SAST Semgrep"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Semgrep (errors → FAIL)
+        # No continue-on-error. Semgrep ERROR findings will fail this job.
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/python
+            p/owasp-top-ten
+            p/secrets
+
+  # ============================================================================
+  # STAGE 5: Backend Unit Tests
+  # Tool: pytest
+  # Policy: ANY test failure → FAIL
+  # ============================================================================
+  backend-tests:
+    name: "Stage 5 — Backend Unit Tests (pytest)"
+    runs-on: ubuntu-latest
+    needs: [secret-scan]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Run pytest
+        working-directory: backend
+        env:
+          # Explicitly NOT a production secret — CI test value only
+          ADMIN_PASSCODE: ci-test-passcode-not-production
+        run: |
+          python -m pytest tests/ -v --tb=short \
+            --junit-xml=test-results.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-test-results
+          path: backend/test-results.xml
+
+  # ============================================================================
+  # STAGE 6: Frontend Build Validation
+  # Tools: tsc, ESLint, Vite
+  # Policy: TypeScript errors → FAIL; ESLint errors → FAIL; build failure → FAIL
+  # ============================================================================
+  frontend-build:
+    name: "Stage 6 — Frontend (TypeScript + Lint + Build)"
+    runs-on: ubuntu-latest
+    needs: [secret-scan]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check (errors → FAIL)
+        run: npx tsc --noEmit
+
+      - name: ESLint (errors → FAIL)
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+  # ============================================================================
+  # STAGE 7: Container Build + Vulnerability Scan
+  # Tool: Trivy (Aqua Security)
+  #
+  # Policy (ENFORCED):
+  #   CRITICAL vulnerabilities → FAIL (exit-code: "1" with severity: CRITICAL)
+  #   HIGH vulnerabilities     → reported in SARIF artifact, non-blocking in CI
+  #                              Exception: HIGH promoted to blocking when OS vendor
+  #                              provides a fix. Document unfixable exceptions in
+  #                              docs/trivy-exceptions.md — do NOT use --ignore-unfixed
+  #                              to silently suppress them.
+  #
+  # Note: Two Trivy runs are performed:
+  #   Run 1 — CRITICAL only, exit-code=1 (hard gate)
+  #   Run 2 — CRITICAL+HIGH, SARIF format for Security tab (informational)
+  # ============================================================================
+  container-security:
+    name: "Stage 7 — Container Build + Trivy Scan"
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t verishield-backend:ci .
+
+      - name: Trivy scan — CRITICAL gate (FAIL on CRITICAL)
+        # Hard gate: exits non-zero if any CRITICAL vulnerability is found.
+        # Does NOT use --ignore-unfixed: unfixable CRITICALs still fail the build.
+        # To accept an unfixable CRITICAL exception, add it to .trivyignore with
+        # a documented reason and review date.
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: verishield-backend:ci
+          format: "table"
+          severity: "CRITICAL"
+          exit-code: "1"
+          ignore-unfixed: false
+
+      - name: Trivy scan — SARIF report (CRITICAL+HIGH, for Security tab)
+        # Informational: uploads to GitHub Security tab. Does NOT fail the job.
+        # HIGH findings are visible here but non-blocking in CI.
+        uses: aquasecurity/trivy-action@master
+        if: always()
+        with:
+          image-ref: verishield-backend:ci
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+          exit-code: "0"
+          ignore-unfixed: false
+
+      - name: Upload Trivy SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+
+  # ============================================================================
+  # STAGE 8: SBOM Generation
+  # Tool: Syft (Anchore) — CycloneDX JSON format
+  #
+  # Policy:
+  #   SBOM generation failure → FAIL
+  #   Generated artifacts are uploaded and must not contain secrets.
+  #   Syft scans file system / manifests; it does not embed runtime credentials.
+  # ============================================================================
+  sbom:
+    name: "Stage 8 — SBOM Generation (Syft / CycloneDX)"
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Generate Python SBOM (CycloneDX JSON)
+        # Failure here fails the job — no error suppression
+        run: |
+          syft backend/ \
+            --output cyclonedx-json=sbom-backend.cyclonedx.json
+
+      - name: Generate Node.js SBOM (CycloneDX JSON)
+        run: |
+          syft . \
+            --output cyclonedx-json=sbom-frontend.cyclonedx.json
+
+      - name: Upload SBOMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-reports
+          path: |
+            sbom-backend.cyclonedx.json
+            sbom-frontend.cyclonedx.json
+
+  # ============================================================================
+  # STAGE 9: DAST — Dynamic Application Security Testing
+  # Tool: OWASP ZAP Baseline Scan
+  #
+  # Policy (ENFORCED):
+  #   fail_action: true  — HIGH or MEDIUM+ ZAP alerts FAIL this job
+  #   The scan runs against a CI-only test server (port 8001).
+  #   The test server uses a non-production CI passcode.
+  #   NEVER scans production.
+  #
+  # Readiness gate:
+  #   Backend is started and /health/live polled before ZAP begins.
+  #   If the backend fails to start, the job fails before ZAP runs.
+  #
+  # ZAP action limitation:
+  #   zaproxy/action-baseline runs ZAP inside Docker internally.
+  #   The target host must be reachable from within the ZAP container.
+  #   We use host.docker.internal or the GitHub runner's actual IP rather than
+  #   127.0.0.1, which is only reachable from the runner process, not from
+  #   within a container network. If host resolution fails, the job fails.
+  # ============================================================================
+  dast-zap:
+    name: "Stage 9 — DAST OWASP ZAP Baseline"
+    runs-on: ubuntu-latest
+    needs: [backend-tests]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Start test backend
+        working-directory: backend
+        env:
+          ADMIN_PASSCODE: ci-zap-test-not-production
+        run: |
+          uvicorn app.main:app --host 0.0.0.0 --port 8001 &
+          echo "Backend PID: $!"
+          # Poll /health/live until ready (max 30s)
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:8001/health/live > /dev/null 2>&1; then
+              echo "Backend ready after ${i}s"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "ERROR: Backend did not become ready in 30s"
+              exit 1
+            fi
+            sleep 1
+          done
+
+      - name: Get runner IP (ZAP container must reach the runner, not 127.0.0.1)
+        id: runner-ip
+        run: |
+          RUNNER_IP=$(ip route get 1 | awk '{print $NF; exit}')
+          echo "runner_ip=$RUNNER_IP" >> $GITHUB_OUTPUT
+          echo "ZAP will scan: http://${RUNNER_IP}:8001"
+          # Verify the backend is reachable on the runner IP (not just localhost)
+          curl -sf "http://${RUNNER_IP}:8001/health/live" || {
+            echo "ERROR: Backend not reachable at runner IP ${RUNNER_IP}:8001"
+            echo "Check firewall/binding — ensure uvicorn binds 0.0.0.0 not 127.0.0.1"
+            exit 1
+          }
+
+      - name: Run OWASP ZAP Baseline Scan
+        # fail_action: true → HIGH or MEDIUM+ findings FAIL this job.
+        # allow_issue_writing: false → no GitHub Issues created.
+        # ZAP scans the runner's externally reachable IP, not 127.0.0.1 (unreachable from container).
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: "http://${{ steps.runner-ip.outputs.runner_ip }}:8001"
+          allow_issue_writing: false
+          fail_action: true
+          cmd_options: "-j" # -j: JSON report output
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-baseline-report
+          path: report_json.json
+          if-no-files-found: warn

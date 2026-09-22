@@ -1,0 +1,59 @@
+# .dockerignore — Files excluded from the Docker build context
+# This prevents secrets, test fixtures, build artifacts and development
+# tooling from entering the container image.
+
+# Environment files — secrets must never enter the image
+.env
+.env.*
+*.env
+!.env.example
+!backend/.env.example
+
+# Test fixtures — especially private key PEM files
+backend/tests/
+backend/tests/fixtures/
+
+# Git and version control
+.git/
+.gitignore
+.gitattributes
+
+# Node modules and frontend build artifacts
+node_modules/
+.output/
+dist/
+.vite/
+.nitro/
+.wrangler/
+.tanstack/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.venv312/
+*.egg-info/
+
+# Database files — created at runtime via init_db()
+*.db
+*.sqlite
+*.sqlite3
+
+# Development and CI
+.github/
+scripts/
+docs/
+
+# Build and packaging scripts
+make_zip.py
+*.zip
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp

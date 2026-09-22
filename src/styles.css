@@ -1,0 +1,241 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VeriShield AI — Design System
+   Warm dark base · Hazard amber accent · Inter UI + JetBrains Mono data
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Surfaces — deep warm brown-black scale */
+  --background: #19120a;
+  --surface-dim: #19120a;
+  --surface-container-lowest: #140d06;
+  --surface-container-low: #221a12;
+  --surface-container: #261e15;
+  --surface-container-high: #31281f;
+  --surface-container-highest: #3c3329;
+  --surface-bright: #41382e;
+  --surface-variant: #3c3329;
+
+  /* Text */
+  --on-surface: #f0e0d1;
+  --on-surface-variant: #d8c3ad;
+  --inverse-surface: #f0e0d1;
+  --inverse-on-surface: #382f25;
+
+  /* Primary — Hazard Amber */
+  --primary: #ffc174;
+  --on-primary: #472a00;
+  --primary-container: #f59e0b;
+  --on-primary-container: #1a0d00;
+  --primary-fixed: #ffddb8;
+  --primary-fixed-dim: #ffb95f;
+  --on-primary-fixed: #2a1700;
+  --on-primary-fixed-variant: #653e00;
+  --surface-tint: #ffb95f;
+  --inverse-primary: #855300;
+
+  /* Secondary — Steel Blue */
+  --secondary: #b7c8e1;
+  --on-secondary: #213145;
+  --secondary-container: #3a4a5f;
+  --on-secondary-container: #a9bad3;
+  --secondary-fixed: #d3e4fe;
+  --secondary-fixed-dim: #b7c8e1;
+  --on-secondary-fixed: #0b1c30;
+  --on-secondary-fixed-variant: #38485d;
+
+  /* Tertiary */
+  --tertiary: #c4cce6;
+  --on-tertiary: #283044;
+
+  /* Error */
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  /* Outline */
+  --outline: #a08e7a;
+  --outline-variant: #534434;
+
+  /* Status */
+  --status-pass: #10b981;
+  --status-pass-dim: rgba(16, 185, 129, 0.12);
+  --status-pass-border: rgba(16, 185, 129, 0.35);
+  --status-warn: #f59e0b;
+  --status-warn-dim: rgba(245, 158, 11, 0.12);
+  --status-warn-border: rgba(245, 158, 11, 0.4);
+  --status-fail: #ef4444;
+  --status-fail-dim: rgba(239, 68, 68, 0.12);
+  --status-fail-border: rgba(239, 68, 68, 0.35);
+
+  --radius: 0.25rem;
+}
+
+/* ── Tailwind v4 token registration ───────────────────────────────────────── */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-variant: var(--surface-variant);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-surface-tint: var(--surface-tint);
+
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-on-secondary-fixed: var(--on-secondary-fixed);
+
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+
+  --color-status-pass: var(--status-pass);
+  --color-status-warn: var(--status-warn);
+  --color-status-fail: var(--status-fail);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius-sm: 0.125rem;
+  --radius-DEFAULT: var(--radius);
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+}
+
+@layer base {
+  * {
+    border-color: var(--outline-variant);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--on-surface);
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .material-symbols-outlined {
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+  }
+  .ms-fill {
+    font-variation-settings:
+      "FILL" 1,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+  }
+}
+
+/* ── Animations ────────────────────────────────────────────────────────────── */
+@keyframes vs-scan {
+  0% {
+    top: -2px;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+@keyframes vs-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes vs-gauge {
+  from {
+    stroke-dashoffset: 283;
+  }
+}
+@keyframes vs-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-container), transparent);
+  box-shadow: 0 0 8px var(--primary-container);
+  animation: vs-scan 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+.spin {
+  animation: vs-spin 1s linear infinite;
+}
+.gauge-fill {
+  animation: vs-gauge 1s ease-out;
+}
+.fade-in {
+  animation: vs-fade-in 0.25s ease-out;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}

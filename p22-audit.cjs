@@ -1,0 +1,54 @@
+const { chromium } = require('@playwright/test');
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const events = [];
+  page.on('console', (message) => events.push(`console:${message.type()}:${message.text()}`));
+  page.on('pageerror', (error) => events.push(`pageerror:${error.message}`));
+  page.on('requestfailed', (request) => events.push(`requestfailed:${request.method()} ${request.url()} ${request.failure()?.errorText || ''}`));
+  await page.goto('http://127.0.0.1:8080/');
+  await page.waitForTimeout(1000);
+  await page.getByRole('button', { name: /Device Enrollment/i }).click();
+  await page.getByText('One-Time Enrollment Code', { exact: true }).waitFor();
+  const enrollmentInputs = page.locator('input[type="text"]');
+  console.log('textInputs=' + await enrollmentInputs.count() + ' body=' + (await page.locator('body').innerText()).slice(0, 900));
+  await enrollmentInputs.nth(0).fill('DEV-OFFICER-01');
+  await enrollmentInputs.nth(1).fill('VS-ENROLL-DEMO-01');
+  await page.getByRole('button', { name: /Generate Key & Enroll with HQ/i }).click();
+  try {
+    await page.getByText(/successfully enrolled with HQ/i).waitFor({ timeout: 15000 });
+  } catch {
+    console.log(JSON.stringify({ enrollment: (await page.locator('body').innerText()).slice(0, 1800), events }, null, 2));
+    throw new Error('Enrollment did not succeed');
+  }
+  await page.getByRole('button', { name: /Quick Sign-In/i }).click();
+  await page.getByText('ENGINE READY').waitFor({ timeout: 120000 });
+  await page.getByText(/STATUS: AWAITING DOCUMENT/i).waitFor();
+  await context.setOffline(true);
+  await page.getByText(/FIELD MODE — OFFLINE/i).waitFor({ timeout: 10000 });
+  await page.locator('input[type="file"]').first().setInputFiles('backend/fixtures/samples/aadhaar_valid.png');
+  await page.getByRole('heading', { name: 'Extraction & Validation Results' }).waitFor({ timeout: 120000 });
+  const extraction = (await page.locator('body').innerText()).slice(0, 2600);
+  await page.getByRole('button', { name: /Continue to AI Checks/i }).click();
+  await page.getByText(/Heuristic — ELA/i).waitFor();
+  await page.getByRole('button', { name: /Proceed to Risk Assessment/i }).click();
+  await page.getByRole('heading', { name: 'Risk Assessment & Decision' }).waitFor();
+  const risk = (await page.locator('body').innerText()).slice(0, 2200);
+  await page.getByRole('button', { name: /Accept/i }).click();
+  await page.getByText('Accepted').waitFor();
+  const pendingOffline = (await page.locator('body').innerText()).match(/OFFLINE · (\d+) PENDING/)?.[1] || null;
+  await context.setOffline(false);
+  await page.waitForTimeout(5000);
+  const syncBody = await page.locator('body').innerText();
+  const pendingOnline = syncBody.match(/OFFLINE · (\d+) PENDING/)?.[1] || null;
+  const recorded = (await page.locator('body').innerText()).slice(0, 1400);
+  const receipt = page.getByRole('link', { name: 'View receipt' });
+  await receipt.click();
+  await page.waitForTimeout(1000);
+  console.log(JSON.stringify({ afterReceipt: page.url(), body: (await page.locator('body').innerText()).slice(0, 4200), events }, null, 2));
+  await page.getByText('Recorded decision').waitFor({ timeout: 10000 });
+  const receiptText = (await page.locator('body').innerText()).slice(0, 4200);
+  console.log(JSON.stringify({ extraction, risk, recorded, pendingOffline, pendingOnline, receipt: receiptText, events }, null, 2));
+  await browser.close();
+})().catch((error) => { console.error(error); process.exit(1); });

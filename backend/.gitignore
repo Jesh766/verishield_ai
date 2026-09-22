@@ -1,0 +1,20 @@
+# Backend Environment & Secret Files
+.env
+.env.local
+.env.*
+!.env.example
+
+# Python virtualenv & caches
+.venv/
+.venv312/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local databases & uploads
+verishield.db
+verishield.db-shm
+verishield.db-wal
+storage/
+fixtures/samples/
+.uploads/
