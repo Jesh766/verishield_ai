@@ -61,12 +61,12 @@ An untracked `verishield.db` was present after the test run. It is generated run
 | RBAC/authentication | PARTIAL | Admin passcode and token gate; device/officer authorization | No complete role model for HQ/officer/reviewer/device operators | Admin login E2E is environment-gated | Explicit roles, sessions, revocation, audit |
 | Audit chain | IMPLEMENTED | SHA-256 hash-chained audit rows and verification endpoint | Local SQLite and process deployment assumptions | Tested and visible in admin | Durable HQ ledger and alerting |
 | Privacy controls | IMPLEMENTED / PARTIAL | Raw upload TTL/volatile storage, masked numbers, derived-only sync | Retention/purpose/consent UX and deployment storage policy are incomplete | Masked receipts work | Add retention policy controls and evidence inventory |
-| Case investigation | PARTIAL | Admin session detail and review update | No dedicated case route, timeline, evidence graph, or reason-first investigation workspace | Admin detail is usable | Create first-class case experience |
+| Case investigation | IMPLEMENTED / PARTIAL | `/cases` provides an evidence-led local investigation route; admin provides synced session detail and review updates | No full timeline/evidence graph or six-case fixture set | Route is usable with stored sessions | Expand timeline and deterministic demo fixtures |
 | HQ command center | PARTIAL | Admin stats, analytics, session table, export | Generic admin surface; no operational hierarchy, alerting, device/officer status | Stats can be demonstrated with synced sessions | Redesign around operational questions |
-| Fraud intelligence | PARTIAL | Analytics counts derived from stored checks/scores | No cluster/anomaly model; no rule/model/future signal taxonomy | Signals are aggregate counts | Add defensible rule-based intelligence page |
+| Fraud intelligence | IMPLEMENTED / PARTIAL | `/intelligence` presents observed rule-based signals and separates model-based/future AI status | No cluster/anomaly model; counts depend on stored sessions | Route is usable with local records | Add validated anomaly analysis only when evidence exists |
 | Demo scenarios CASE-001..006 | MISSING | Existing seed data covers checkpoint/officers/devices only | Requested deterministic cases do not exist | Cannot claim six-case demo | Add clearly labelled derived demo fixtures |
 | Responsive/accessibility | PARTIAL | Semantic controls, ARIA status regions, responsive Tailwind layouts exist | No complete viewport/accessibility audit; current visual system remains prototype-like | Basic workflow works | Run browser checks and redesign surfaces |
-| Architecture exports | PARTIAL | Existing architecture assets/scripts are present under older names | Requested real-time export names/content are absent | Not aligned to new story | Generate presentation and technical exports |
+| Architecture exports | IMPLEMENTED | Presentation-ready 16:9 real-time architecture plus detailed technical architecture in SVG/PNG | Diagrams describe current prototype boundaries; they do not imply unavailable integrations | Ready for SIH presentation | Keep exports synchronized with implementation changes |
 
 ## Product Truth
 
@@ -100,3 +100,10 @@ The repository currently demonstrates a credible local document-screening protot
 - Added `docs/VeriShield_Technical_Architecture.svg` and `.png` for deeper implementation context.
 
 The requested CASE-001 through CASE-006 deterministic demo fixture set, connected multi-stage backend orchestration, durable distributed replay/rate-limit state, and authorized government adapters remain future work. They are intentionally not represented as implemented.
+
+## Final SIH Architecture Pass
+
+- Primary presentation architecture: `docs/VeriShield_RealTime_Architecture.svg` and `.png`, 1600x900 (16:9).
+- Technical architecture: `docs/VeriShield_Technical_Architecture.svg` and `.png`, with dashed future/optional infrastructure.
+- Presentation notes and exact safe claims: `docs/SIH_ARCHITECTURE_NOTES.md`.
+- No application technology stack or verification implementation was changed in this pass.

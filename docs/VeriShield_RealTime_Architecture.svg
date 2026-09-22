@@ -1,38 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960">
-  <rect width="1600" height="960" fill="#10161d"/>
-  <style>
-    .title{font:700 42px Arial,sans-serif;fill:#f4f7f8}.sub{font:400 18px Arial,sans-serif;fill:#9eabb4}.label{font:700 18px Arial,sans-serif;fill:#f4f7f8}.body{font:400 15px Arial,sans-serif;fill:#c3cdd2}.tiny{font:700 12px Arial,sans-serif;letter-spacing:2px;fill:#72d5bd}.box{fill:#18222a;stroke:#3a4b56;stroke-width:2}.accent{fill:#153b3d;stroke:#50d0b1;stroke-width:2}.warn{fill:#3b2d1b;stroke:#e5b45e;stroke-width:2}.line{stroke:#69cdb4;stroke-width:3;fill:none;marker-end:url(#arrow)}
-  </style>
-  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#69cdb4"/></marker></defs>
-  <text x="80" y="78" class="title">VeriShield AI</text>
-  <text x="80" y="112" class="sub">Real-time identity verification and fraud intelligence platform</text>
-  <text x="80" y="162" class="tiny">ONE PERSON  /  MULTIPLE SIGNALS  /  EXPLAINABLE DECISION</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">VeriShield AI real-time identity verification architecture</title>
+  <desc id="desc">Capture and extract document and person inputs, aggregate document, person, authority and device signals, assess consistency and advisory risk, produce an explainable decision, create a case record, and preserve a tamper-evident audit chain.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08151b"/><stop offset="1" stop-color="#10252a"/></linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#143e40"/><stop offset="1" stop-color="#1c3038"/></linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0 0 L0 8 L11 4 z" fill="#6fe0c1"/></marker>
+    <style>
+      .title{font:700 46px Arial,sans-serif;letter-spacing:1px;fill:#f5fbfa}.subtitle{font:400 21px Arial,sans-serif;fill:#aac2c5}.eyebrow{font:700 13px Arial,sans-serif;letter-spacing:3px;fill:#77e1c3}.section{font:700 16px Arial,sans-serif;letter-spacing:2px;fill:#77e1c3}.head{font:700 19px Arial,sans-serif;fill:#f5fbfa}.copy{font:400 14px Arial,sans-serif;fill:#bdd0d2}.small{font:700 12px Arial,sans-serif;letter-spacing:1px;fill:#8da9ad}.flow{stroke:#6fe0c1;stroke-width:3;fill:none;marker-end:url(#arrow)}.rail{stroke:#477980;stroke-width:2;fill:none}.signal{fill:url(#signal);stroke:#4e8587;stroke-width:2}.main{fill:#123d3d;stroke:#6fe0c1;stroke-width:2}.authority{fill:#3e321e;stroke:#e4b967;stroke-width:2}.audit{fill:#172d38;stroke:#7aa5bb;stroke-width:2}.node{fill:#14272d;stroke:#42666d;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <path d="M0 154 H1600" stroke="#27464d"/>
+  <text x="72" y="74" class="eyebrow">VERIFICATION PLATFORM / SIH PRESENTATION ARCHITECTURE</text>
+  <text x="72" y="125" class="title">VERISHIELD AI</text>
+  <text x="72" y="157" class="subtitle">REAL-TIME IDENTITY VERIFICATION &amp; FRAUD INTELLIGENCE</text>
+  <text x="1330" y="83" text-anchor="end" class="small">MULTI-SIGNAL TRUST</text>
+  <text x="1330" y="108" text-anchor="end" class="copy">One case. Independent evidence.</text>
 
-  <rect x="80" y="210" width="1440" height="110" rx="4" class="accent"/>
-  <text x="800" y="254" text-anchor="middle" class="label">CAPTURE AND EXTRACT</text>
-  <text x="800" y="286" text-anchor="middle" class="body">Document image, optional selfie, OCR fields, document classification</text>
-  <path d="M800 320 V365" class="line"/>
+  <text x="72" y="201" class="section">FIELD / VERIFICATION LAYER</text>
+  <rect x="72" y="220" width="280" height="68" rx="5" class="main"/>
+  <text x="212" y="249" text-anchor="middle" class="head">CAPTURE</text><text x="212" y="271" text-anchor="middle" class="copy">Document + optional person input</text>
+  <path d="M352 254 H404" class="flow"/>
+  <rect x="414" y="220" width="280" height="68" rx="5" class="main"/>
+  <text x="554" y="249" text-anchor="middle" class="head">EXTRACT</text><text x="554" y="271" text-anchor="middle" class="copy">OCR + classification + fields</text>
+  <path d="M694 254 H746" class="flow"/>
+  <rect x="756" y="220" width="280" height="68" rx="5" class="main"/>
+  <text x="896" y="249" text-anchor="middle" class="head">VERIFICATION CASE</text><text x="896" y="271" text-anchor="middle" class="copy">One identity, one evidence record</text>
+  <path d="M1036 254 H1088" class="flow"/>
+  <rect x="1098" y="220" width="430" height="68" rx="5" class="node"/>
+  <text x="1313" y="249" text-anchor="middle" class="head">VERIFICATION SIGNALS</text><text x="1313" y="271" text-anchor="middle" class="copy">Independent evidence enters the case</text>
 
-  <rect x="80" y="365" width="260" height="180" rx="4" class="box"/>
-  <text x="210" y="405" text-anchor="middle" class="label">DOCUMENT</text>
-  <text x="105" y="443" class="body">Structure and checksum</text><text x="105" y="470" class="body">MRZ / Verhoeff / DL rules</text><text x="105" y="497" class="body">OCR confidence</text>
-  <rect x="390" y="365" width="260" height="180" rx="4" class="box"/>
-  <text x="520" y="405" text-anchor="middle" class="label">INTEGRITY</text>
-  <text x="415" y="443" class="body">ELA / recompression</text><text x="415" y="470" class="body">Advisory heuristic</text><text x="415" y="497" class="body">Not authentication</text>
-  <rect x="700" y="365" width="260" height="180" rx="4" class="box"/>
-  <text x="830" y="405" text-anchor="middle" class="label">PERSON</text>
-  <text x="725" y="443" class="body">Optional face capture</text><text x="725" y="470" class="body">Advisory similarity</text><text x="725" y="497" class="body">Officer-reviewed</text>
-  <rect x="1010" y="365" width="510" height="180" rx="4" class="warn"/>
-  <text x="1265" y="405" text-anchor="middle" class="label">AUTHORITY GATEWAY</text>
-  <text x="1035" y="443" class="body">Provider adapter boundary</text><text x="1035" y="470" class="body">Current status: integration ready</text><text x="1035" y="497" class="body">No government provider connected</text>
-  <path d="M210 545 V595 H800" class="line"/><path d="M520 545 V595 H800" class="line"/><path d="M830 545 V595 H800" class="line"/><path d="M1265 545 V595 H800" class="line"/>
+  <rect x="72" y="330" width="1456" height="178" rx="6" class="signal"/>
+  <text x="100" y="362" class="section">MULTI-SIGNAL TRUST</text>
+  <line x1="100" y1="382" x2="1500" y2="382" class="rail"/>
+  <line x1="452" y1="394" x2="452" y2="488" class="rail"/><line x1="804" y1="394" x2="804" y2="488" class="rail"/><line x1="1156" y1="394" x2="1156" y2="488" class="rail"/>
+  <text x="130" y="421" class="head">DOCUMENT</text><text x="130" y="447" class="copy">OCR • Extraction</text><text x="130" y="469" class="copy">Structural validation</text><text x="130" y="491" class="copy">Document Integrity Analysis</text>
+  <text x="482" y="421" class="head">PERSON</text><text x="482" y="447" class="copy">Optional face capture</text><text x="482" y="469" class="copy">Advisory Face Similarity</text><text x="482" y="491" class="copy">Officer-reviewed evidence</text>
+  <text x="834" y="421" class="head">AUTHORITY</text><text x="834" y="447" class="copy">Authoritative Verification Gateway</text><text x="834" y="469" class="copy" fill="#f0ce84">NOT CONFIGURED</text><text x="834" y="491" class="copy">No government provider connected</text>
+  <text x="1186" y="421" class="head">DEVICE / SECURITY</text><text x="1186" y="447" class="copy">ECDSA P-256 identity</text><text x="1186" y="469" class="copy">Signed requests • Nonce</text><text x="1186" y="491" class="copy">Replay protection</text>
 
-  <rect x="520" y="595" width="560" height="120" rx="4" class="accent"/>
-  <text x="800" y="638" text-anchor="middle" class="label">CROSS-CONSISTENCY AND RISK</text>
-  <text x="800" y="672" text-anchor="middle" class="body">Rule-based signals plus advisory risk aggregation</text>
-  <path d="M800 715 V760" class="line"/>
-  <rect x="360" y="760" width="360" height="105" rx="4" class="box"/><text x="540" y="802" text-anchor="middle" class="label">DECISION SUPPORT</text><text x="540" y="832" text-anchor="middle" class="body">Clear / review / escalate</text>
-  <rect x="840" y="760" width="400" height="105" rx="4" class="box"/><text x="1040" y="802" text-anchor="middle" class="label">CASE AND AUDIT</text><text x="1040" y="832" text-anchor="middle" class="body">Officer decision, receipt, audit chain</text>
-  <path d="M800 715 V742 H540 V760" class="line"/><path d="M800 715 V742 H1040 V760" class="line"/>
-  <text x="80" y="920" class="tiny">SUPPORTING TRUST: ECDSA DEVICE IDENTITY  |  RBAC ADMIN GATE  |  SQLITE LEDGER  |  SHA-256 AUDIT CHAIN</text>
+  <path d="M800 508 V548" class="flow"/>
+  <rect x="520" y="548" width="560" height="64" rx="5" class="main"/>
+  <text x="800" y="576" text-anchor="middle" class="head">CONSISTENCY ENGINE</text><text x="800" y="598" text-anchor="middle" class="copy">Cross-signal comparison and evidence alignment</text>
+  <path d="M800 612 V640" class="flow"/>
+  <rect x="520" y="640" width="560" height="64" rx="5" class="main"/>
+  <text x="800" y="668" text-anchor="middle" class="head">RISK INTELLIGENCE</text><text x="800" y="690" text-anchor="middle" class="copy">Advisory Risk Assessment • explainable contributions</text>
+  <path d="M800 704 V732" class="flow"/>
+  <rect x="520" y="732" width="560" height="64" rx="5" class="main"/>
+  <text x="800" y="760" text-anchor="middle" class="head">EXPLAINABLE DECISION</text><text x="800" y="782" text-anchor="middle" class="copy">Clear • review • escalate • officer decides</text>
+
+  <path d="M520 764 H344 V830" class="flow"/><path d="M1080 764 H1256 V830" class="flow"/>
+  <rect x="72" y="830" width="544" height="50" rx="5" class="node"/><text x="344" y="861" text-anchor="middle" class="head">CASE RECORD / HQ OPERATIONS</text>
+  <rect x="984" y="830" width="544" height="50" rx="5" class="audit"/><text x="1256" y="861" text-anchor="middle" class="head">TAMPER-EVIDENT AUDIT / SHA-256 HASH CHAIN</text>
 </svg>

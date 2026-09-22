@@ -1,24 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
-  <rect width="1600" height="1100" fill="#f4f6f5"/>
-  <style>
-    .title{font:700 38px Arial,sans-serif;fill:#182329}.sub{font:400 17px Arial,sans-serif;fill:#56656c}.h{font:700 18px Arial,sans-serif;fill:#182329}.b{font:400 14px Arial,sans-serif;fill:#3f5057}.t{font:700 11px Arial,sans-serif;letter-spacing:2px;fill:#087f6d}.box{fill:#fff;stroke:#aab9b8;stroke-width:2}.green{fill:#e5f5f0;stroke:#2c9f88;stroke-width:2}.amber{fill:#fff4df;stroke:#c38a2c;stroke-width:2}.blue{fill:#eaf1f7;stroke:#6388a5;stroke-width:2}.line{stroke:#318c7c;stroke-width:2.5;fill:none;marker-end:url(#a)}
-  </style>
-  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0 0 L0 6 L9 3z" fill="#318c7c"/></marker></defs>
-  <text x="70" y="70" class="title">VeriShield Technical Architecture</text><text x="70" y="101" class="sub">Audited prototype boundaries and integration points</text>
-  <text x="70" y="150" class="t">CLIENT SIGNAL LAYER</text>
-  <rect x="70" y="175" width="330" height="180" rx="4" class="green"/><text x="235" y="215" text-anchor="middle" class="h">Officer workstation</text><text x="95" y="250" class="b">React / TanStack Router</text><text x="95" y="276" class="b">Camera and file validation</text><text x="95" y="302" class="b">Local receipt ledger</text><text x="95" y="328" class="b">Network and sync tracker</text>
-  <rect x="450" y="175" width="330" height="180" rx="4" class="green"/><text x="615" y="215" text-anchor="middle" class="h">Verification engine</text><text x="475" y="250" class="b">Tesseract.js OCR / classification</text><text x="475" y="276" class="b">Extraction and masking</text><text x="475" y="302" class="b">Checksum and MRZ rules</text><text x="475" y="328" class="b">ELA and advisory face similarity</text>
-  <rect x="830" y="175" width="330" height="180" rx="4" class="amber"/><text x="995" y="215" text-anchor="middle" class="h">Decision support</text><text x="855" y="250" class="b">Weighted advisory risk score</text><text x="855" y="276" class="b">Explainable contributions</text><text x="855" y="302" class="b">Officer decision required</text><text x="855" y="328" class="b">No official risk claim</text>
-  <rect x="1210" y="175" width="320" height="180" rx="4" class="blue"/><text x="1370" y="215" text-anchor="middle" class="h">WebCrypto identity</text><text x="1235" y="250" class="b">ECDSA P-256 key pair</text><text x="1235" y="276" class="b">Canonical signed payload</text><text x="1235" y="302" class="b">Nonce and timestamp</text><text x="1235" y="328" class="b">IndexedDB key storage</text>
-  <path d="M400 265 H450" class="line"/><path d="M780 265 H830" class="line"/><path d="M1160 265 H1210" class="line"/>
-  <text x="70" y="430" class="t">CONNECTED HQ SERVICE</text>
-  <rect x="70" y="455" width="420" height="240" rx="4" class="blue"/><text x="280" y="495" text-anchor="middle" class="h">FastAPI gateway</text><text x="95" y="535" class="b">Payload limits / CORS / security headers</text><text x="95" y="563" class="b">Correlation IDs and privacy-safe logs</text><text x="95" y="591" class="b">Upload, OCR, extraction, validation APIs</text><text x="95" y="619" class="b">Signed sync and enrollment APIs</text><text x="95" y="647" class="b">Admin stats, cases, export, audit verify</text>
-  <rect x="550" y="455" width="420" height="240" rx="4" class="amber"/><text x="760" y="495" text-anchor="middle" class="h">Authoritative gateway</text><text x="575" y="535" class="b">Provider adapter interface exists</text><text x="575" y="563" class="b">Current provider: local-only</text><text x="575" y="591" class="b">Status: NOT_CONFIGURED</text><text x="575" y="619" class="b">No UIDAI / Passport / Parivahan calls</text><text x="575" y="647" class="b">Integration requires authorization</text>
-  <rect x="1030" y="455" width="500" height="240" rx="4" class="box"/><text x="1280" y="495" text-anchor="middle" class="h">Security and audit boundary</text><text x="1055" y="535" class="b">Registered device and officer authorization</text><text x="1055" y="563" class="b">In-memory nonce and rate-limit prototype state</text><text x="1055" y="591" class="b">Atomic session plus audit writes</text><text x="1055" y="619" class="b">SHA-256 hash chain, not blockchain</text><text x="1055" y="647" class="b">SQLite prototype ledger</text>
-  <path d="M615 355 V410 H280 V455" class="line"/><path d="M995 355 V410 H760 V455" class="line"/><path d="M1370 355 V410 H1280 V455" class="line"/>
-  <text x="70" y="780" class="t">OPERATIONAL SURFACES</text>
-  <rect x="70" y="805" width="330" height="150" rx="4" class="green"/><text x="235" y="845" text-anchor="middle" class="h">Verify</text><text x="95" y="882" class="b">Capture, pipeline, decision, receipt</text><text x="95" y="910" class="b">Online-first story with local resilience</text>
-  <rect x="450" y="805" width="330" height="150" rx="4" class="green"/><text x="615" y="845" text-anchor="middle" class="h">Cases</text><text x="475" y="882" class="b">Recorded evidence and reasons</text><text x="475" y="910" class="b">Officer review workflow</text>
-  <rect x="830" y="805" width="330" height="150" rx="4" class="blue"/><text x="995" y="845" text-anchor="middle" class="h">Intelligence</text><text x="855" y="882" class="b">Observed rule-based signals</text><text x="855" y="910" class="b">Model/future AI clearly separated</text>
-  <rect x="1210" y="805" width="320" height="150" rx="4" class="box"/><text x="1370" y="845" text-anchor="middle" class="h">Command center</text><text x="1235" y="882" class="b">HQ stats, analytics, devices</text><text x="1235" y="910" class="b">Audit chain and export</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">VeriShield AI technical architecture</title>
+  <desc id="desc">Browser field device local engines produce a verification session. Signed synchronization reaches FastAPI, which verifies devices, persists sessions, exposes operations surfaces, and writes a SHA-256 audit chain. Future components are dashed.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5f7f6"/><stop offset="1" stop-color="#e9efed"/></linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0 0 L0 8 L11 4 z" fill="#197c6b"/></marker>
+    <style>
+      .title{font:700 38px Arial,sans-serif;fill:#17252a}.subtitle{font:400 17px Arial,sans-serif;fill:#52656b}.eyebrow{font:700 12px Arial,sans-serif;letter-spacing:3px;fill:#137c6a}.head{font:700 18px Arial,sans-serif;fill:#17252a}.copy{font:400 14px Arial,sans-serif;fill:#40565d}.small{font:700 11px Arial,sans-serif;letter-spacing:1px;fill:#60777c}.zone{fill:#ffffff;stroke:#b6c7c4;stroke-width:2}.live{fill:#e2f4ee;stroke:#2c9a83;stroke-width:2}.security{fill:#e6f0f7;stroke:#658ca6;stroke-width:2}.truth{fill:#fff3dc;stroke:#c18a2d;stroke-width:2}.future{fill:#fff;stroke:#9daaaa;stroke-width:2;stroke-dasharray:8 6}.line{stroke:#197c6b;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.rail{stroke:#b0c2bf;stroke-width:2;fill:none}
+    </style>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <text x="70" y="65" class="eyebrow">VERISHIELD AI / SIH TECHNICAL VIEW</text>
+  <text x="70" y="111" class="title">Technical Architecture</text>
+  <text x="70" y="141" class="subtitle">Implemented prototype path, explicit authority boundary, and future production extensions</text>
+
+  <rect x="50" y="175" width="1500" height="220" rx="8" class="zone"/>
+  <text x="78" y="207" class="eyebrow">BROWSER / FIELD DEVICE</text>
+  <rect x="78" y="232" width="310" height="125" rx="5" class="live"/><text x="233" y="266" text-anchor="middle" class="head">Officer workstation</text><text x="102" y="296" class="copy">React / TanStack Router</text><text x="102" y="319" class="copy">Capture, camera, masking, local receipt</text><text x="102" y="342" class="copy">Online sync with local resilience</text>
+  <path d="M388 294 H430" class="line"/>
+  <rect x="440" y="232" width="370" height="125" rx="5" class="live"/><text x="625" y="266" text-anchor="middle" class="head">Local verification engines</text><text x="464" y="296" class="copy">OCR • classification • field extraction</text><text x="464" y="319" class="copy">Structural checks • MRZ • Verhoeff • DL</text><text x="464" y="342" class="copy">Document Integrity Analysis • Advisory Face Similarity</text>
+  <path d="M810 294 H852" class="line"/>
+  <rect x="862" y="232" width="300" height="125" rx="5" class="truth"/><text x="1012" y="266" text-anchor="middle" class="head">Advisory Risk Assessment</text><text x="886" y="296" class="copy">Deterministic weighted aggregation</text><text x="886" y="319" class="copy">Explainable contributions</text><text x="886" y="342" class="copy">Not Official Risk Score</text>
+  <path d="M1162 294 H1204" class="line"/>
+  <rect x="1214" y="232" width="308" height="125" rx="5" class="security"/><text x="1368" y="266" text-anchor="middle" class="head">Verification Session</text><text x="1238" y="296" class="copy">Masked derived evidence</text><text x="1238" y="319" class="copy">ECDSA P-256 signed payload</text><text x="1238" y="342" class="copy">Nonce + timestamp + idempotency</text>
+
+  <path d="M1368 395 V445" class="line"/>
+  <rect x="310" y="445" width="980" height="190" rx="8" class="zone"/>
+  <text x="338" y="478" class="eyebrow">CONNECTED VERIFICATION / HQ SERVICE</text>
+  <rect x="338" y="503" width="275" height="102" rx="5" class="security"/><text x="475" y="536" text-anchor="middle" class="head">Signed Sync</text><text x="362" y="566" class="copy">POST /sync/session</text><text x="362" y="589" class="copy">Device, signature, nonce checks</text>
+  <path d="M613 554 H655" class="line"/>
+  <rect x="665" y="503" width="275" height="102" rx="5" class="security"/><text x="802" y="536" text-anchor="middle" class="head">FastAPI gateway</text><text x="689" y="566" class="copy">Validation, rate limits, headers</text><text x="689" y="589" class="copy">Enrollment and document APIs</text>
+  <path d="M940 554 H982" class="line"/>
+  <rect x="992" y="503" width="270" height="102" rx="5" class="live"/><text x="1127" y="536" text-anchor="middle" class="head">Device verification</text><text x="1016" y="566" class="copy">Registered device + officer</text><text x="1016" y="589" class="copy">Checkpoint authorization</text>
+
+  <path d="M802 635 V687" class="line"/>
+  <rect x="50" y="687" width="1500" height="175" rx="8" class="zone"/>
+  <text x="78" y="719" class="eyebrow">PERSISTENCE / OPERATIONS</text>
+  <rect x="78" y="744" width="300" height="90" rx="5" class="live"/><text x="228" y="777" text-anchor="middle" class="head">Session Persistence</text><text x="102" y="807" class="copy">SQLite derived ledger • atomic sync</text>
+  <path d="M378 789 H420" class="line"/>
+  <rect x="430" y="744" width="300" height="90" rx="5" class="live"/><text x="580" y="777" text-anchor="middle" class="head">Admin / HQ</text><text x="454" y="807" class="copy">Stats • analytics • review • export</text>
+  <path d="M730 789 H772" class="line"/>
+  <rect x="782" y="744" width="300" height="90" rx="5" class="live"/><text x="932" y="777" text-anchor="middle" class="head">Cases / Intelligence</text><text x="806" y="807" class="copy">Evidence-led cases and rule signals</text>
+  <path d="M1082 789 H1124" class="line"/>
+  <rect x="1134" y="744" width="388" height="90" rx="5" class="security"/><text x="1328" y="777" text-anchor="middle" class="head">Tamper-Evident Audit Chain</text><text x="1158" y="807" class="copy">SHA-256 hash chain • verification endpoint</text>
+
+  <rect x="50" y="895" width="1500" height="70" rx="8" class="truth"/>
+  <text x="78" y="924" class="eyebrow">AUTHORITY BOUNDARY</text><text x="78" y="948" class="copy">Authoritative Verification Gateway: NOT CONFIGURED. No live UIDAI, Passport Seva, or Parivahan provider is connected.</text>
+  <rect x="1200" y="25" width="322" height="95" rx="6" class="future"/><text x="1361" y="55" text-anchor="middle" class="head">Future / optional</text><text x="1225" y="81" class="copy">Dashed components are not current claims.</text><text x="1225" y="101" class="small">Redis • PostgreSQL • WebAuthn/TPM • authorized adapters</text>
 </svg>
