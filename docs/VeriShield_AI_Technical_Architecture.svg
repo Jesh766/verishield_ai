@@ -1,0 +1,335 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1280" width="1920" height="1280" style="background: #0B0F19; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGlowB" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </linearGradient>
+
+    <!-- Arrow Markers -->
+    <marker id="arrowCyanB" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38BDF8"/>
+    </marker>
+    <marker id="arrowAmberB" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#F59E0B"/>
+    </marker>
+    <marker id="arrowGreenB" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10B981"/>
+    </marker>
+  </defs>
+
+  <rect width="1920" height="1280" fill="url(#bgGlowB)"/>
+
+  <!-- ========================================================================= -->
+  <!-- HEADER -->
+  <!-- ========================================================================= -->
+  <g transform="translate(50, 40)">
+    <text x="0" y="24" font-size="24" font-weight="800" fill="#FFFFFF" letter-spacing="1">VERISHIELD AI <tspan fill="#38BDF8">| TECHNICAL DEEP-DIVE ARCHITECTURE</tspan></text>
+    <text x="0" y="46" font-size="12" font-weight="500" fill="#94A3B8" font-family="-apple-system, sans-serif">Detailed Implementation Mapping: Modules, Data Structures, Cryptography, APIs, &amp; Database Schemas</text>
+  </g>
+
+  <line x1="50" y1="100" x2="1870" y2="100" stroke="#1E293B" stroke-width="1.5"/>
+
+  <!-- ========================================================================= -->
+  <!-- COLUMN 1: FIELD ENGINE MODULES (x: 50, w: 560) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(50, 120)">
+    <rect x="0" y="0" width="560" height="1100" rx="12" fill="#0F172A" stroke="#0284C7" stroke-width="1.5"/>
+    <rect x="0" y="0" width="560" height="44" rx="12" fill="#0369A1"/>
+    <rect x="0" y="30" width="560" height="14" fill="#0369A1"/>
+    <text x="20" y="28" font-size="13" font-weight="800" fill="#FFFFFF">1. FIELD SCREENING ENGINE IMPLEMENTATION (BROWSER RUNTIME)</text>
+
+    <!-- Module 1.1: verishield.ts -->
+    <g transform="translate(16, 60)">
+      <rect x="0" y="0" width="528" height="140" rx="8" fill="#0B132B" stroke="#0284C7" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#38BDF8">Orchestration Engine: src/lib/verishield.ts</text>
+      <text x="16" y="42" font-size="10" fill="#94A3B8">Function Signature:</text>
+      <text x="16" y="58" font-size="10" fill="#A7F3D0">screen(documentImage: Blob, selfie: Blob|null, onStatus, forcedType): Promise&lt;ScreeningResult&gt;</text>
+      <line x1="16" y1="68" x2="512" y2="68" stroke="#1E293B" stroke-width="1"/>
+      <text x="16" y="86" font-size="10" fill="#CBD5E1">• Load-Bearing Isolation: OCR &amp; Checksum failures propagate recapture prompt.</text>
+      <text x="16" y="102" font-size="10" fill="#CBD5E1">• Supplementary Isolation: ELA &amp; Face errors yield fallback structures without crash.</text>
+      <text x="16" y="118" font-size="10" fill="#38BDF8">• Automatically masks primary identity numbers before persistence in StoredSession.</text>
+    </g>
+
+    <!-- Module 1.2: ocr.ts & extract.ts -->
+    <g transform="translate(16, 215)">
+      <rect x="0" y="0" width="528" height="180" rx="8" fill="#0B132B" stroke="#0284C7" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#38BDF8">OCR &amp; Field Extraction: engine/ocr.ts + engine/extract.ts</text>
+      <text x="16" y="42" font-size="10" fill="#94A3B8">OCR Engine: Tesseract.js Wasm (Worker Thread)</text>
+      <text x="16" y="58" font-size="10" fill="#94A3B8">Supported Document Types: ["aadhaar", "passport", "visa", "dl"]</text>
+
+      <text x="16" y="80" font-size="10" font-weight="700" fill="#F8FAFC">REGEX EXTRACTION RULES:</text>
+      <text x="16" y="96" font-size="10" fill="#CBD5E1">• Aadhaar: [2-9]\d{3}\s?\d{4}\s?\d{4}</text>
+      <text x="16" y="110" font-size="10" fill="#CBD5E1">• Passport MRZ: P&lt;IND[A-Z&lt;]+ (ICAO 9303 Line 1 &amp; Line 2 parser)</text>
+      <text x="16" y="124" font-size="10" fill="#CBD5E1">• Driving Licence: [A-Z]{2}[- ]?\d{2}[- ]?\d{11}</text>
+      <text x="16" y="140" font-size="10" fill="#F59E0B">• Masking Function: maskNumber() masks all but last 4 digits</text>
+      <text x="16" y="156" font-size="10" fill="#EF4444">• Primary MRZ lines are wiped prior to local storage</text>
+    </g>
+
+    <!-- Module 1.3: checksum.ts -->
+    <g transform="translate(16, 410)">
+      <rect x="0" y="0" width="528" height="175" rx="8" fill="#0B132B" stroke="#0284C7" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#38BDF8">Deterministic Structural Checksums: engine/checksum.ts</text>
+      <text x="16" y="44" font-size="10" fill="#CBD5E1">1. Aadhaar Verhoeff Checksum: Dihedral Group D5 Multiplication Table</text>
+      <text x="16" y="60" font-size="10" fill="#CBD5E1">2. Passport ICAO 9303 Checksum: Weighting factors [7, 3, 1] Modulo 10</text>
+      <text x="16" y="76" font-size="10" fill="#CBD5E1">3. Driving Licence Format: State prefix + RTO code + year format validation</text>
+      <text x="16" y="92" font-size="10" fill="#CBD5E1">4. Date Consistency: DOB in past, expiry date in future, issue vs DOB checks</text>
+      <text x="16" y="112" font-size="10" stroke="none" fill="#A7F3D0">CheckItem Output: { check: string, label: string, passed: boolean, detail: string }</text>
+      <text x="16" y="132" font-size="10" fill="#94A3B8">Disclaimer: Structural validity does not guarantee document authenticity.</text>
+      <text x="16" y="148" font-size="10" fill="#94A3B8">Load-bearing signal for officer decision support.</text>
+    </g>
+
+    <!-- Module 1.4: ela.ts (Tamper) -->
+    <g transform="translate(16, 600)">
+      <rect x="0" y="0" width="528" height="155" rx="8" fill="#0B132B" stroke="#0284C7" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#38BDF8">Tamper Analysis (ELA): engine/ela.ts</text>
+      <text x="16" y="44" font-size="10" fill="#CBD5E1">Algorithm: Error Level Analysis via Canvas Recompression</text>
+      <text x="16" y="60" font-size="10" fill="#94A3B8">1. Resaves canvas image at 75% JPEG quality</text>
+      <text x="16" y="74" font-size="10" fill="#94A3B8">2. Computes per-pixel absolute error diff: |Orig - Recompressed|</text>
+      <text x="16" y="88" font-size="10" fill="#94A3B8">3. Calculates Mean Error, Outlier Ratio (&gt;35 diff), and Edge Concentration</text>
+      <text x="16" y="104" font-size="10" fill="#A7F3D0">Score Formula: min(100, Math.round(outlierRatio * 320 + meanError * 4.5))</text>
+      <text x="16" y="120" font-size="10" fill="#CBD5E1">Verdict: clean (&lt;25) | suspicious (25–44) | high_tamper (&gt;=45)</text>
+      <text x="16" y="136" font-size="10" fill="#94A3B8">Generates base64 visual error heatmap canvas data URL</text>
+    </g>
+
+    <!-- Module 1.5: face.ts -->
+    <g transform="translate(16, 770)">
+      <rect x="0" y="0" width="528" height="145" rx="8" fill="#0B132B" stroke="#0284C7" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#38BDF8">Face Similarity Engine: engine/face.ts</text>
+      <text x="16" y="44" font-size="10" fill="#CBD5E1">Method: MobileNet Feature Embeddings + Cosine Distance</text>
+      <text x="16" y="60" font-size="10" fill="#94A3B8">1. Detects face bounding box on document scan and live selfie</text>
+      <text x="16" y="74" font-size="10" fill="#94A3B8">2. Extracts 128-dimensional normalised feature embedding vectors</text>
+      <text x="16" y="88" font-size="10" fill="#A7F3D0">3. Similarity = (A • B) / (||A|| * ||B||)  [Range: 0.00 – 1.00]</text>
+      <text x="16" y="104" font-size="10" fill="#CBD5E1">Verdict: match (&gt;=0.68) | mismatch (&lt;0.68) | no_face</text>
+      <text x="16" y="120" font-size="10" fill="#94A3B8">Fallback: Isolated try-catch returns no_face without blocking screening pass.</text>
+    </g>
+
+    <!-- Module 1.6: risk.ts -->
+    <g transform="translate(16, 930)">
+      <rect x="0" y="0" width="528" height="150" rx="8" fill="#0B132B" stroke="#38BDF8" stroke-width="1.5"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#FFFFFF">Advisory Risk Aggregator: engine/risk.ts</text>
+      <text x="16" y="44" font-size="10" fill="#94A3B8">Weighted Penalty Formula (Max Score 100):</text>
+      <text x="16" y="60" font-size="10" fill="#FBBF24">• Failed Checksum Item: +25 points per failure</text>
+      <text x="16" y="74" font-size="10" fill="#FBBF24">• ELA Tamper High (&gt;=45): +35 points | Suspicious (25-44): +15 points</text>
+      <text x="16" y="88" font-size="10" fill="#FBBF24">• Face Mismatch (&lt;0.68): +40 points</text>
+      <text x="16" y="102" font-size="10" fill="#FBBF24">• Low OCR Confidence (&lt;60%): +15 points</text>
+      <text x="16" y="122" font-size="10" font-weight="700" fill="#A7F3D0">Bands: Clear (0-19) | Review (20-49) | Escalate (50-100) | Unscored</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- COLUMN 2: DEVICE TRUST & SYNC DATA STRUCTURES (x: 630, w: 600) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(630, 120)">
+    <rect x="0" y="0" width="600" height="1100" rx="12" fill="#191004" stroke="#D97706" stroke-width="1.5"/>
+    <rect x="0" y="0" width="600" height="44" rx="12" fill="#78350F"/>
+    <rect x="0" y="30" width="600" height="14" fill="#78350F"/>
+    <text x="20" y="28" font-size="13" font-weight="800" fill="#FFFFFF">2. DEVICE TRUST, CRYPTOGRAPHY &amp; SYNC SPECIFICATION</text>
+
+    <!-- Section 2.1: Key Persistence -->
+    <g transform="translate(16, 60)">
+      <rect x="0" y="0" width="568" height="210" rx="8" fill="#2A1B08" stroke="#F59E0B" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#FBBF24">Device Cryptographic Key Management: src/lib/sync.ts</text>
+      <text x="16" y="44" font-size="10" fill="#CBD5E1">Algorithm: ECDSA P-256 (secp256r1) with SHA-256</text>
+
+      <g transform="translate(16, 56)" font-size="10">
+        <rect x="0" y="0" width="536" height="65" rx="6" fill="#191004" stroke="#78350F" stroke-width="1"/>
+        <text x="12" y="18" font-weight="700" fill="#38BDF8">PRIVATE KEY INDEXEDDB STORE:</text>
+        <text x="12" y="34" fill="#CBD5E1">Database: <tspan fill="#F59E0B">verishield-device-keys</tspan> | ObjectStore: <tspan fill="#F59E0B">keys</tspan> | Key: <tspan fill="#F59E0B">ecdsa-p256</tspan></text>
+        <text x="12" y="48" fill="#FBBF24">Property: extractable = false (CryptoKey object — never leaves browser)</text>
+      </g>
+
+      <g transform="translate(16, 130)" font-size="10">
+        <rect x="0" y="0" width="536" height="65" rx="6" fill="#191004" stroke="#78350F" stroke-width="1"/>
+        <text x="12" y="18" font-weight="700" fill="#38BDF8">PUBLIC KEY PROVISIONING:</text>
+        <text x="12" y="34" fill="#CBD5E1">Format: SubjectPublicKeyInfo (SPKI) DER Base64 encoded</text>
+        <text x="12" y="48" fill="#34D399">Pre-registered at HQ via controlled device enrollment (POST /device/enroll)</text>
+      </g>
+    </g>
+
+    <!-- Section 2.2: Canonical Request Signing -->
+    <g transform="translate(16, 285)">
+      <rect x="0" y="0" width="568" height="230" rx="8" fill="#2A1B08" stroke="#F59E0B" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#FBBF24">Canonical Signature Formula &amp; HTTP Headers</text>
+      
+      <g transform="translate(16, 40)" font-size="10">
+        <rect x="0" y="0" width="536" height="70" rx="6" fill="#0F172A" stroke="#38BDF8" stroke-width="1"/>
+        <text x="12" y="18" font-weight="700" fill="#38BDF8">CANONICAL STRING FORMULA:</text>
+        <text x="12" y="36" fill="#A7F3D0">canonical = "POST\n/sync/session\n" + timestamp + "\n" +</text>
+        <text x="12" y="52" fill="#A7F3D0">            nonce + "\n" + sha256_hex(body) + "\n" + device_id</text>
+      </g>
+
+      <text x="16" y="130" font-size="10" font-weight="700" fill="#CBD5E1">REQUIRED HTTP HEADERS ON /sync/session:</text>
+      <g transform="translate(16, 142)" font-size="10" font-family="monospace" fill="#FDE68A">
+        <text x="0" y="12">X-VeriShield-Device:    DEV-OFFICER-01</text>
+        <text x="0" y="26">X-VeriShield-Timestamp: 1774167600 (Max skew: 300 seconds)</text>
+        <text x="0" y="40">X-VeriShield-Nonce:     r8x2k9a1774167600 (Replay cache check)</text>
+        <text x="0" y="54">X-VeriShield-Signature: MEQCID... (Base64 DER ECDSA Signature)</text>
+      </g>
+    </g>
+
+    <!-- Section 2.3: StoredSession Schema -->
+    <g transform="translate(16, 530)">
+      <rect x="0" y="0" width="568" height="260" rx="8" fill="#2A1B08" stroke="#D97706" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#FBBF24">Local Storage Schema: StoredSession (ledger.ts)</text>
+      <text x="16" y="44" font-size="10" fill="#94A3B8">Persisted in browser LocalStorage / IndexedDB:</text>
+
+      <g transform="translate(16, 56)" font-size="10" font-family="monospace" fill="#CBD5E1">
+        <text x="0" y="12">interface StoredSession {</text>
+        <text x="16" y="26">id: string;              // e.g. VS-260830-AB12C</text>
+        <text x="16" y="40">documentType: DocumentType; // aadhaar | passport | dl | visa</text>
+        <text x="16" y="54">createdAt: string;       // ISO 8601 UTC timestamp</text>
+        <text x="16" y="68">officerId: string;       // Officer badge ID</text>
+        <text x="16" y="82">maskedFields: Record&lt;string, string&gt;; // Identity numbers masked!</text>
+        <text x="16" y="96">checks: CheckItem[];     // Array of deterministic check results</text>
+        <text x="16" y="110">tamperScore: number;     // ELA outlier score (0 - 100)</text>
+        <text x="16" y="124">faceScore: number | null;// Cosine similarity score (0.0 - 1.0)</text>
+        <text x="16" y="138">risk: RiskResult;        // Composite score &amp; advisory band</text>
+        <text x="16" y="152">decision: "cleared" | "referred" | "rejected" | null;</text>
+        <text x="16" y="166">synced: boolean;         // Sync status flag</text>
+        <text x="0" y="184">}</text>
+      </g>
+    </g>
+
+    <!-- Section 2.4: Sync Execution Flow -->
+    <g transform="translate(16, 805)">
+      <rect x="0" y="0" width="568" height="275" rx="8" fill="#2A1B08" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#FFFFFF">Sync Push Pipeline: pushPendingSessions()</text>
+      
+      <g transform="translate(16, 44)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0">1. Queries Local Ledger for sessions where (decision != null &amp;&amp; synced == false)</text>
+        <text x="0" y="16">2. Constructs JSON SyncSessionIn payload (excluding raw images &amp; unmasked PII)</text>
+        <text x="0" y="32">3. Computes SHA-256 body hash and canonical signature string</text>
+        <text x="0" y="48">4. Signs canonical string with WebCrypto device private key</text>
+        <text x="0" y="64">5. Dispatches HTTP POST to ${VITE_API_URL}/sync/session</text>
+        <text x="0" y="80">6. On HTTP 200 OK → marks session synced: true in Local Ledger</text>
+        <text x="0" y="96">7. On Network Failure / HTTP 4xx/5xx → leaves synced: false for retry</text>
+
+        <rect x="0" y="115" width="536" height="85" rx="6" fill="#191004" stroke="#F59E0B" stroke-width="1"/>
+        <text x="12" y="132" font-weight="700" fill="#FBBF24">SECURITY GUARANTEES ENFORCED BY HQ:</text>
+        <text x="12" y="148" fill="#94A3B8">• Reject unregistered device ID (403 DEVICE_NOT_REGISTERED)</text>
+        <text x="12" y="162" fill="#94A3B8">• Reject revoked or suspended device status (403 DEVICE_REVOKED)</text>
+        <text x="12" y="176" fill="#94A3B8">• Reject checkpoint ID mismatch (403 DEVICE_CHECKPOINT_MISMATCH)</text>
+        <text x="12" y="190" fill="#94A3B8">• Reject invalid ECDSA signature (401 INVALID_SIGNATURE)</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- COLUMN 3: HQ BACKEND SERVICE & AUDIT (x: 1260, w: 610) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(1260, 120)">
+    <rect x="0" y="0" width="610" height="1100" rx="12" fill="#062E1E" stroke="#10B981" stroke-width="1.5"/>
+    <rect x="0" y="0" width="610" height="44" rx="12" fill="#064E3B"/>
+    <rect x="0" y="30" width="610" height="14" fill="#064E3B"/>
+    <text x="20" y="28" font-size="13" font-weight="800" fill="#FFFFFF">3. HQ BACKEND SERVICES &amp; AUDIT HASH CHAIN (FASTAPI + SQLALCHEMY)</text>
+
+    <!-- Section 3.1: FastAPI Middleware & Security -->
+    <g transform="translate(16, 60)">
+      <rect x="0" y="0" width="578" height="175" rx="8" fill="#031A11" stroke="#10B981" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#34D399">HQ Security &amp; Observability Middleware: main.py</text>
+      <g transform="translate(16, 44)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0">• Correlation ID Injection: X-Correlation-ID &amp; X-Request-ID headers</text>
+        <text x="0" y="16">• Early Payload Size Protection: Rejects requests &gt; 1MB (/sync/session)</text>
+        <text x="0" y="32">• Hardened Security Headers: CSP, HSTS, X-Frame-Options DENY, X-Content-Type nosniff</text>
+        <text x="0" y="48">• Privacy-Safe Observability: Logs latency &amp; device ID; strictly excludes PII &amp; keys</text>
+        <text x="0" y="64">• Sliding-Window Rate Limiter: 300 requests/minute per client IP + device</text>
+        <text x="0" y="80" font-weight="700" fill="#34D399">• Nonce Replay Cache: Rejects duplicate request nonces within 10-minute window</text>
+      </g>
+    </g>
+
+    <!-- Section 3.2: SQLAlchemy Schema -->
+    <g transform="translate(16, 250)">
+      <rect x="0" y="0" width="578" height="340" rx="8" fill="#031A11" stroke="#10B981" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#34D399">HQ Database Schema Models: models/db.py</text>
+      <text x="16" y="42" font-size="10" fill="#94A3B8">Database Engine: SQLite (Local/Field Mode) | PostgreSQL (HQ Production)</text>
+
+      <g transform="translate(16, 56)" font-size="10" font-family="monospace" fill="#A7F3D0">
+        <!-- Table 1 -->
+        <text x="0" y="12" font-weight="700" fill="#FFFFFF">RegisteredDevice</text>
+        <text x="160" y="12" fill="#CBD5E1">(device_id PK, checkpoint_id FK, officer_badge, public_key_spki_b64, status)</text>
+
+        <!-- Table 2 -->
+        <text x="0" y="32" font-weight="700" fill="#FFFFFF">DeviceEnrollment</text>
+        <text x="160" y="32" fill="#CBD5E1">(id PK, enrollment_code_hash UNIQUE, device_id, status, expires_at, used_at)</text>
+
+        <!-- Table 3 -->
+        <text x="0" y="52" font-weight="700" fill="#FFFFFF">Checkpoint</text>
+        <text x="160" y="52" fill="#CBD5E1">(id PK, name, location)</text>
+
+        <!-- Table 4 -->
+        <text x="0" y="72" font-weight="700" fill="#FFFFFF">Officer</text>
+        <text x="160" y="72" fill="#CBD5E1">(id PK, badge_id UNIQUE, checkpoint_id FK, password_hash)</text>
+
+        <!-- Table 5 -->
+        <text x="0" y="92" font-weight="700" fill="#FFFFFF">VerificationSession</text>
+        <text x="160" y="92" fill="#CBD5E1">(id PK [VS-...], officer_id FK, checkpoint_id FK, document_type,</text>
+        <text x="160" y="106" fill="#CBD5E1"> extracted_fields JSON [masked], checksum_results JSON, ocr_confidence,</text>
+        <text x="160" y="120" fill="#CBD5E1"> face_match_score, tamper_score, risk_score, risk_band, decision,</text>
+        <text x="160" y="134" fill="#CBD5E1"> review_status [OPEN/CLOSED], created_at, received_at, synced)</text>
+
+        <!-- Table 6 -->
+        <text x="0" y="156" font-weight="700" fill="#FFFFFF">AuditLog</text>
+        <text x="160" y="156" fill="#CBD5E1">(id PK AUTOINC, session_id FK, action, actor, detail, timestamp,</text>
+        <text x="160" y="170" stroke="none" fill="#FBBF24"> prev_hash VARCHAR(64), event_hash VARCHAR(64))</text>
+      </g>
+
+      <rect x="16" y="240" width="546" height="80" rx="6" fill="#062E1E" stroke="#059669" stroke-width="1"/>
+      <text x="28" y="258" font-size="11" font-weight="700" fill="#34D399">ATOMIC TRANSACTION COMMIT MODEL:</text>
+      <text x="28" y="274" font-size="10" fill="#CBD5E1">Session persistence and SYNC_ACCEPTED audit write land inside one SQLAlchemy</text>
+      <text x="28" y="288" font-size="10" fill="#CBD5E1">transaction (db.flush() ➔ log(commit=False) ➔ db.commit()). Prevents un-audited sessions.</text>
+    </g>
+
+    <!-- Section 3.3: Cryptographic Audit Hash Chain -->
+    <g transform="translate(16, 605)">
+      <rect x="0" y="0" width="578" height="235" rx="8" fill="#031A11" stroke="#10B981" stroke-width="1.5"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#FFFFFF">Cryptographic Audit Chain Implementation: models/db.py</text>
+      
+      <g transform="translate(16, 42)" font-size="10">
+        <rect x="0" y="0" width="546" height="55" rx="6" fill="#062E1E" stroke="#059669" stroke-width="1"/>
+        <text x="12" y="18" font-weight="700" fill="#34D399">GENESIS HASH &amp; HASH CALCULATION:</text>
+        <text x="12" y="34" font-family="monospace" fill="#A7F3D0">GENESIS_HASH = "0000000000000000000000000000000000000000000000000000000000000000"</text>
+        <text x="12" y="46" font-family="monospace" fill="#A7F3D0">raw = f"{session_id}|{action}|{actor}|{detail}|{ts_str}|{prev_hash}"</text>
+      </g>
+
+      <g transform="translate(16, 110)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0" font-weight="700" fill="#34D399">THREAD-SAFE AUDIT LOGGING: log(db, session_id, action, actor, detail, commit)</text>
+        <text x="0" y="16">• Protected by threading.Lock (_AUDIT_LOCK) to prevent hash race conditions.</text>
+        <text x="0" y="32">• Fetches last event_hash as prev_hash for current event.</text>
+        <text x="0" y="48">• Computes new SHA-256 event_hash and appends to audit_log table.</text>
+      </g>
+
+      <g transform="translate(16, 175)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0" font-weight="700" fill="#34D399">VERIFICATION ENGINE: verify_audit_chain(db)</text>
+        <text x="0" y="16">• Sequentially recalculates and verifies hash chain from GENESIS to tip.</text>
+        <text x="0" y="32">• Detects modified rows, deleted logs, or reordered audit events.</text>
+      </g>
+    </g>
+
+    <!-- Section 3.4: HQ Admin APIs -->
+    <g transform="translate(16, 855)">
+      <rect x="0" y="0" width="578" height="225" rx="8" fill="#031A11" stroke="#10B981" stroke-width="1"/>
+      <text x="16" y="24" font-size="12" font-weight="700" fill="#34D399">HQ Admin APIs: api/admin.py</text>
+      
+      <g transform="translate(16, 44)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0">• Authentication: POST /admin/login issues Bearer token (30-minute TTL)</text>
+        <text x="0" y="16">• Rate Limiting: 5 failed login attempts per minute locks client IP</text>
+        <text x="0" y="32">• GET /admin/sessions: Paginated SQL query with filters (checkpoint, decision, band, q)</text>
+        <text x="0" y="48">• GET /admin/sessions/{id}: Detailed session audit trail &amp; history view</text>
+        <text x="0" y="64">• PUT /admin/sessions/{id}/review: Updates case review status (OPEN/CLOSED/ESCALATED)</text>
+        <text x="0" y="80">• GET /admin/audit/verify: Runs full cryptographic audit chain verification</text>
+        <text x="0" y="96">• GET /admin/stats &amp; /admin/analytics: SQL aggregation over screening metrics</text>
+        <text x="0" y="112">• GET /admin/export: Generates operational compliance report JSON</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================================================= -->
+  <line x1="50" y1="1235" x2="1870" y2="1235" stroke="#1E293B" stroke-width="1.5"/>
+  <g transform="translate(50, 1260)" font-size="11" font-weight="600" fill="#64748B" font-family="-apple-system, sans-serif">
+    <text x="0" y="0">VERISHIELD AI TECHNICAL SPECIFICATION • SIH 2026 AUDITABLE ARCHITECTURE DOCUMENTATION</text>
+    <text x="1820" y="0" text-anchor="end" font-weight="700" fill="#34D399">COMPLIANT WITH SIH CODEBASE TRUTH TIER-A</text>
+  </g>
+</svg>

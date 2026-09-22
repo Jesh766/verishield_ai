@@ -1,0 +1,532 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" style="background: #090D16; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="50%" stop-color="#090D16"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </linearGradient>
+
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="50%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+
+    <linearGradient id="cardGradField" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#0B132B"/>
+    </linearGradient>
+
+    <linearGradient id="cardGradOffline" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0C2340"/>
+      <stop offset="100%" stop-color="#07162C"/>
+    </linearGradient>
+
+    <linearGradient id="cardGradTrust" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2A1B08"/>
+      <stop offset="100%" stop-color="#191004"/>
+    </linearGradient>
+
+    <linearGradient id="cardGradHQ" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#062E1E"/>
+      <stop offset="100%" stop-color="#031A11"/>
+    </linearGradient>
+
+    <!-- Filters for Glows & Shadows -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="glowAmber" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Arrow Markers -->
+    <marker id="arrowCyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38BDF8"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#F59E0B"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10B981"/>
+    </marker>
+    <marker id="arrowMuted" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748B"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="url(#bgGlow)"/>
+
+  <!-- Background Subtle Grid Overlay -->
+  <g opacity="0.05" stroke="#FFFFFF" stroke-width="1">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="none"/>
+      <path d="M 40 0 L 0 0 0 40"/>
+    </pattern>
+    <rect width="1920" height="1080" fill="url(#grid)" />
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- TOP HEADER AREA -->
+  <!-- ========================================================================= -->
+  <g transform="translate(50, 35)">
+    <!-- Brand Icon -->
+    <rect x="0" y="0" width="48" height="48" rx="12" fill="#0284C7" filter="url(#glowCyan)"/>
+    <path d="M 24 10 L 38 17 V 27 C 38 35 28 40 24 42 C 20 40 10 35 10 27 V 17 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 19 25 L 23 29 L 30 20" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Main Title -->
+    <text x="64" y="28" font-size="26" font-weight="800" fill="#FFFFFF" letter-spacing="1">VERISHIELD AI <tspan fill="#38BDF8" font-weight="500">| SYSTEM ARCHITECTURE</tspan></text>
+    <text x="64" y="48" font-size="13" font-weight="500" fill="#94A3B8">Offline-First Identity Verification with Device Trust, Secure Synchronization, &amp; Auditable HQ Verification</text>
+
+    <!-- Top Badges -->
+    <g transform="translate(1330, 8)">
+      <rect x="0" y="0" width="150" height="32" rx="16" fill="#0369A1" fill-opacity="0.4" stroke="#38BDF8" stroke-width="1"/>
+      <text x="75" y="20" font-size="11" font-weight="700" fill="#38BDF8" text-anchor="middle">SIH 2026 SUBMISSION</text>
+
+      <rect x="162" y="0" width="165" height="32" rx="16" fill="#065F46" fill-opacity="0.4" stroke="#10B981" stroke-width="1"/>
+      <text x="244" y="20" font-size="11" font-weight="700" fill="#34D399" text-anchor="middle">VERIFIED CODEBASE v3.1</text>
+
+      <rect x="339" y="0" width="145" height="32" rx="16" fill="#78350F" fill-opacity="0.4" stroke="#F59E0B" stroke-width="1"/>
+      <text x="411" y="20" font-size="11" font-weight="700" fill="#FBBF24" text-anchor="middle">0-SERVER EDGE DEPS</text>
+    </g>
+  </g>
+
+  <!-- Horizontal Separator -->
+  <line x1="50" y1="100" x2="1870" y2="100" stroke="#1E293B" stroke-width="1.5"/>
+
+  <!-- ========================================================================= -->
+  <!-- ZONE 01: FIELD ACTOR -->
+  <!-- ========================================================================= -->
+  <g transform="translate(50, 120)">
+    <!-- Zone Container Box -->
+    <rect x="0" y="0" width="240" height="890" rx="16" fill="url(#cardGradField)" stroke="#334155" stroke-width="1.5" filter="url(#shadow)"/>
+    
+    <!-- Zone Header -->
+    <rect x="0" y="0" width="240" height="50" rx="16" fill="#1E293B"/>
+    <rect x="0" y="34" width="240" height="16" fill="#1E293B"/>
+    <circle cx="24" cy="25" r="7" fill="#38BDF8"/>
+    <text x="40" y="30" font-size="14" font-weight="800" fill="#FFFFFF" letter-spacing="0.5">01 | FIELD ACTOR</text>
+
+    <!-- Content Inside Zone 1 -->
+    <!-- Field Officer Card -->
+    <g transform="translate(16, 75)">
+      <rect x="0" y="0" width="208" height="340" rx="12" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="none"/>
+      
+      <!-- Officer Icon Circle -->
+      <circle cx="104" cy="55" r="32" fill="#0369A1" fill-opacity="0.3" stroke="#38BDF8" stroke-width="2"/>
+      <path d="M 104 38 C 96 38 90 44 90 52 C 90 60 96 66 104 66 C 112 66 118 60 118 52 C 118 44 112 38 104 38 Z M 88 78 C 80 78 76 84 76 90 V 94 H 132 V 94 C 132 84 128 78 120 78 Z" fill="#38BDF8"/>
+
+      <text x="104" y="122" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Field Officer</text>
+      <text x="104" y="142" font-size="12" font-weight="600" fill="#38BDF8" text-anchor="middle">Badge: VS-OFFICER-01</text>
+      
+      <line x1="20" y1="160" x2="188" y2="160" stroke="#1E293B" stroke-width="1"/>
+
+      <text x="20" y="185" font-size="12" font-weight="700" fill="#94A3B8">OPERATIONAL ACTIONS:</text>
+
+      <g transform="translate(20, 200)" font-size="11" fill="#CBD5E1">
+        <text x="0" y="0">1. Captures Doc Image</text>
+        <text x="12" y="16" font-size="10" fill="#64748B">(Aadhaar/Passport/DL/Visa)</text>
+
+        <text x="0" y="38">2. Captures Live Selfie</text>
+        <text x="12" y="54" font-size="10" fill="#64748B">(Optional portrait match)</text>
+
+        <text x="0" y="76">3. Reviews Risk Score</text>
+
+        <text x="0" y="98">4. Records Local Decision</text>
+        <text x="12" y="114" font-size="10" fill="#38BDF8">(Cleared / Referred / Rejected)</text>
+      </g>
+    </g>
+
+    <!-- Context Box -->
+    <g transform="translate(16, 440)">
+      <rect x="0" y="0" width="208" height="425" rx="10" fill="#0B132B" stroke="#1E293B" stroke-width="1"/>
+      <text x="16" y="28" font-size="12" font-weight="700" fill="#38BDF8">ENVIRONMENT CONTEXT</text>
+      
+      <g transform="translate(16, 50)" font-size="11" fill="#94A3B8">
+        <text x="0" y="0" font-weight="600" fill="#F8FAFC">• Checkpoint / Field Handset</text>
+        <text x="0" y="22" font-weight="600" fill="#F8FAFC">• Web Browser Runtime</text>
+        <text x="0" y="44" font-weight="600" fill="#F8FAFC">• Client-Side Wasm/JS</text>
+        <text x="0" y="66" font-weight="600" fill="#F8FAFC">• Offline Air-Gapped Mode</text>
+      </g>
+
+      <line x1="16" y1="135" x2="192" y2="135" stroke="#1E293B" stroke-width="1"/>
+
+      <text x="16" y="160" font-size="11" font-weight="700" fill="#34D399">PRIVACY PROMISE</text>
+      <text x="16" y="180" font-size="10" fill="#94A3B8" width="180">
+        <tspan x="16" dy="0">Raw document scans</tspan>
+        <tspan x="16" dy="14">and unmasked PII are</tspan>
+        <tspan x="16" dy="14" font-weight="700" fill="#F8FAFC">NEVER transmitted</tspan>
+        <tspan x="16" dy="14">to HQ backend or external</tspan>
+        <tspan x="16" dy="14">servers.</tspan>
+      </text>
+
+      <rect x="16" y="270" width="176" height="135" rx="8" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+      <text x="26" y="292" font-size="10" font-weight="700" fill="#38BDF8">EXECUTION MODEL</text>
+      <text x="26" y="312" font-size="10" fill="#CBD5E1">100% Client Browser</text>
+      <text x="26" y="328" font-size="10" fill="#CBD5E1">Zero Network Latency</text>
+      <text x="26" y="344" font-size="10" fill="#CBD5E1">Zero Cloud Upload</text>
+      <text x="26" y="360" font-size="10" fill="#CBD5E1">Instant Field Verdict</text>
+      <text x="26" y="388" font-size="9" font-weight="700" fill="#34D399">✓ 100% OPERATIONAL</text>
+    </g>
+  </g>
+
+  <!-- Connection: Field Officer -> Screening Engine -->
+  <path d="M 274 290 L 315 290" stroke="#38BDF8" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+
+  <!-- ========================================================================= -->
+  <!-- ZONE 02: FIELD / OFFLINE VERIFICATION ENGINE -->
+  <!-- ========================================================================= -->
+  <g transform="translate(325, 120)">
+    <!-- Zone Container Box -->
+    <rect x="0" y="0" width="570" height="890" rx="16" fill="url(#cardGradOffline)" stroke="#0284C7" stroke-width="1.5" filter="url(#shadow)"/>
+    
+    <!-- Zone Header -->
+    <rect x="0" y="0" width="570" height="50" rx="16" fill="#0369A1"/>
+    <rect x="0" y="34" width="570" height="16" fill="#0369A1"/>
+    <circle cx="24" cy="25" r="7" fill="#38BDF8"/>
+    <text x="40" y="30" font-size="14" font-weight="800" fill="#FFFFFF" letter-spacing="0.5">02 | FIELD / OFFLINE VERIFICATION ENGINE</text>
+    <text x="350" y="30" font-size="11" font-weight="600" fill="#E0F2FE">Runs 100% On-Device (Browser)</text>
+
+    <!-- Container 2.1: Screening Workflow Manager -->
+    <g transform="translate(20, 65)">
+      <rect x="0" y="0" width="530" height="65" rx="10" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+      <text x="20" y="26" font-size="14" font-weight="800" fill="#FFFFFF">Screening Workflow Orchestrator</text>
+      <text x="20" y="46" font-size="11" fill="#94A3B8">Executes single-pass isolated evaluation • Fault-tolerant module boundaries keep OCR/Checksum alive</text>
+    </g>
+
+    <path d="M 285 130 L 285 155" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+    <!-- Container 2.2: Verification Pipeline Engines (Grid of 5 Modules) -->
+    <g transform="translate(20, 160)">
+      <rect x="0" y="0" width="530" height="420" rx="12" fill="#0B132B" stroke="#1E293B" stroke-width="1"/>
+      <text x="20" y="26" font-size="12" font-weight="800" fill="#38BDF8" letter-spacing="0.5">ON-DEVICE ANALYSIS PIPELINE (PARALLEL &amp; SEQUENTIAL)</text>
+
+      <!-- Engine 1: OCR -->
+      <g transform="translate(16, 42)">
+        <rect x="0" y="0" width="242" height="105" rx="8" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <rect x="0" y="0" width="242" height="24" rx="8" fill="#0284C7"/>
+        <rect x="0" y="16" width="242" height="8" fill="#0284C7"/>
+        <text x="12" y="16" font-size="11" font-weight="800" fill="#FFFFFF">1. OCR &amp; FIELD EXTRACTION</text>
+        <text x="12" y="40" font-size="10" font-weight="600" fill="#F8FAFC">Tesseract.js / Regex Parser</text>
+        <text x="12" y="56" font-size="10" fill="#94A3B8">• Parses Aadhaar, Passport, DL, Visa</text>
+        <text x="12" y="70" font-size="10" fill="#94A3B8">• Extracts name, DOB, ID number, MRZ</text>
+        <text x="12" y="86" font-size="10" fill="#38BDF8">• Automatic Identity Number Masking</text>
+      </g>
+
+      <!-- Engine 2: File Validation -->
+      <g transform="translate(272, 42)">
+        <rect x="0" y="0" width="242" height="105" rx="8" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <rect x="0" y="0" width="242" height="24" rx="8" fill="#0284C7"/>
+        <rect x="0" y="16" width="242" height="8" fill="#0284C7"/>
+        <text x="12" y="16" font-size="11" font-weight="800" fill="#FFFFFF">2. STRUCTURAL FILE VALIDATION</text>
+        <text x="12" y="40" font-size="10" font-weight="600" fill="#F8FAFC">Binary Magic Bytes Inspector</text>
+        <text x="12" y="56" font-size="10" fill="#94A3B8">• Validates JPEG (ÿØ), PNG, WebP</text>
+        <text x="12" y="70" font-size="10" fill="#94A3B8">• Enforces 12MB max payload boundary</text>
+        <text x="12" y="86" font-size="10" fill="#38BDF8">• Image integrity &amp; resolution check</text>
+      </g>
+
+      <!-- Engine 3: Checksum -->
+      <g transform="translate(16, 160)">
+        <rect x="0" y="0" width="242" height="115" rx="8" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <rect x="0" y="0" width="242" height="24" rx="8" fill="#0284C7"/>
+        <rect x="0" y="16" width="242" height="8" fill="#0284C7"/>
+        <text x="12" y="16" font-size="11" font-weight="800" fill="#FFFFFF">3. CHECKSUM RULES ENGINE</text>
+        <text x="12" y="40" font-size="10" font-weight="600" fill="#F8FAFC">Deterministic Algorithm Suite</text>
+        <text x="12" y="56" font-size="10" fill="#94A3B8">• Verhoeff Dihedral (Aadhaar 12-digit)</text>
+        <text x="12" y="70" font-size="10" fill="#94A3B8">• ICAO 9303 Modulo 10 3-1-7 (Passport)</text>
+        <text x="12" y="84" font-size="10" fill="#94A3B8">• DL State &amp; RTO Code Regex format</text>
+        <text x="12" y="98" font-size="10" fill="#38BDF8">• Date consistency &amp; expiry checks</text>
+      </g>
+
+      <!-- Engine 4: Tamper Analysis -->
+      <g transform="translate(272, 160)">
+        <rect x="0" y="0" width="242" height="115" rx="8" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <rect x="0" y="0" width="242" height="24" rx="8" fill="#0284C7"/>
+        <rect x="0" y="16" width="242" height="8" fill="#0284C7"/>
+        <text x="12" y="16" font-size="11" font-weight="800" fill="#FFFFFF">4. TAMPER ANALYSIS (ELA)</text>
+        <text x="12" y="40" font-size="10" font-weight="600" fill="#F8FAFC">Error Level Analysis Engine</text>
+        <text x="12" y="56" font-size="10" fill="#94A3B8">• Recompression error analysis</text>
+        <text x="12" y="70" font-size="10" fill="#94A3B8">• Computes outlier ratio &amp; hotspots</text>
+        <text x="12" y="84" font-size="10" fill="#94A3B8">• Detects digital photo splicing &amp; edits</text>
+        <text x="12" y="98" font-size="10" fill="#38BDF8">• Visual heatmap error matrix</text>
+      </g>
+
+      <!-- Engine 5: Face Similarity -->
+      <g transform="translate(144, 288)">
+        <rect x="0" y="0" width="242" height="115" rx="8" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <rect x="0" y="0" width="242" height="24" rx="8" fill="#0284C7"/>
+        <rect x="0" y="16" width="242" height="8" fill="#0284C7"/>
+        <text x="12" y="16" font-size="11" font-weight="800" fill="#FFFFFF">5. FACE SIMILARITY MATCH</text>
+        <text x="12" y="40" font-size="10" font-weight="600" fill="#F8FAFC">MobileNet Feature Extractor</text>
+        <text x="12" y="56" font-size="10" fill="#94A3B8">• Live selfie vs document portrait</text>
+        <text x="12" y="70" font-size="10" fill="#94A3B8">• Cosine distance vector similarity</text>
+        <text x="12" y="84" font-size="10" fill="#94A3B8">• Returns match score (0.00 – 1.00)</text>
+        <text x="12" y="98" font-size="10" fill="#38BDF8">• Verdict: match / mismatch / no_face</text>
+      </g>
+    </g>
+
+    <path d="M 285 580 L 285 605" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+    <!-- Container 2.3: Advisory Risk Engine -->
+    <g transform="translate(20, 610)">
+      <rect x="0" y="0" width="530" height="115" rx="12" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+      <text x="20" y="26" font-size="14" font-weight="800" fill="#FFFFFF">Advisory Risk Scoring Engine</text>
+      <text x="20" y="46" font-size="11" fill="#94A3B8">Composite multi-signal aggregator scoring 0 – 100 based on weighted penalties</text>
+      
+      <g transform="translate(20, 65)">
+        <rect x="0" y="0" width="115" height="34" rx="6" fill="#065F46" stroke="#10B981" stroke-width="1"/>
+        <text x="57" y="15" font-size="10" font-weight="700" fill="#34D399" text-anchor="middle">CLEAR</text>
+        <text x="57" y="27" font-size="9" fill="#A7F3D0" text-anchor="middle">Score 0 – 19</text>
+
+        <rect x="130" y="0" width="115" height="34" rx="6" fill="#854D0E" stroke="#F59E0B" stroke-width="1"/>
+        <text x="187" y="15" font-size="10" font-weight="700" fill="#FBBF24" text-anchor="middle">REVIEW</text>
+        <text x="187" y="27" font-size="9" fill="#FDE68A" text-anchor="middle">Score 20 – 49</text>
+
+        <rect x="260" y="0" width="115" height="34" rx="6" fill="#991B1B" stroke="#EF4444" stroke-width="1"/>
+        <text x="317" y="15" font-size="10" font-weight="700" fill="#FCA5A5" text-anchor="middle">ESCALATE</text>
+        <text x="317" y="27" font-size="9" fill="#FECACA" text-anchor="middle">Score 50 – 100</text>
+
+        <rect x="390" y="0" width="115" height="34" rx="6" fill="#334155" stroke="#64748B" stroke-width="1"/>
+        <text x="447" y="15" font-size="10" font-weight="700" fill="#94A3B8" text-anchor="middle">UNSCORED</text>
+        <text x="447" y="27" font-size="9" fill="#CBD5E1" text-anchor="middle">Missing Evidence</text>
+      </g>
+    </g>
+
+    <!-- Container 2.4: OPTIONAL / FUTURE AUTHORITATIVE PROVIDER -->
+    <g transform="translate(20, 745)">
+      <rect x="0" y="0" width="530" height="120" rx="10" fill="#0F172A" fill-opacity="0.6" stroke="#64748B" stroke-width="1.5" stroke-dasharray="6,4"/>
+      
+      <rect x="20" y="14" width="180" height="22" rx="4" fill="#334155"/>
+      <text x="110" y="29" font-size="10" font-weight="800" fill="#94A3B8" text-anchor="middle">OPTIONAL / FUTURE COMPONENT</text>
+
+      <text x="215" y="30" font-size="13" font-weight="700" fill="#CBD5E1">Authoritative Government Provider</text>
+      <text x="20" y="58" font-size="11" fill="#64748B">• Interface Abstraction (<tspan fill="#94A3B8">VerificationProvider</tspan> in <tspan fill="#94A3B8">authoritative.ts</tspan>)</text>
+      <text x="20" y="74" font-size="11" fill="#64748B">• Designed for future live API connection: UIDAI Aadhaar, Passport Seva, Parivahan</text>
+      <text x="20" y="94" font-size="10" font-weight="700" fill="#F59E0B">⚠ CURRENT STATUS IN PROTOTYPE: NOT CONNECTED • LOCAL SCREENING ONLY</text>
+    </g>
+  </g>
+
+  <!-- Connection: Field Offline Verification -> Device Trust -->
+  <path d="M 895 665 L 940 665" stroke="#38BDF8" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+
+  <!-- ========================================================================= -->
+  <!-- ZONE 03: DEVICE TRUST & LOCAL LEDGER -->
+  <!-- ========================================================================= -->
+  <g transform="translate(950, 120)">
+    <!-- Zone Container Box -->
+    <rect x="0" y="0" width="450" height="890" rx="16" fill="url(#cardGradTrust)" stroke="#D97706" stroke-width="1.5" filter="url(#shadow)"/>
+    
+    <!-- Zone Header -->
+    <rect x="0" y="0" width="450" height="50" rx="16" fill="#78350F"/>
+    <rect x="0" y="34" width="450" height="16" fill="#78350F"/>
+    <circle cx="24" cy="25" r="7" fill="#F59E0B"/>
+    <text x="40" y="30" font-size="14" font-weight="800" fill="#FFFFFF" letter-spacing="0.5">03 | DEVICE TRUST &amp; LOCAL LEDGER</text>
+
+    <!-- Card 3.1: Device Keys -->
+    <g transform="translate(20, 65)">
+      <rect x="0" y="0" width="410" height="175" rx="10" fill="#191004" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="16" y="26" font-size="14" font-weight="800" fill="#FFFFFF">Device Cryptographic Identity</text>
+      <text x="16" y="44" font-size="11" font-weight="600" fill="#F59E0B">WebCrypto ECDSA P-256 Non-Exportable Key Pair</text>
+
+      <g transform="translate(16, 60)">
+        <rect x="0" y="0" width="378" height="42" rx="6" fill="#2A1B08" stroke="#78350F" stroke-width="1"/>
+        <text x="12" y="18" font-size="10" font-weight="700" fill="#FBBF24">PRIVATE KEY (Non-Exportable CryptoKey)</text>
+        <text x="12" y="32" font-size="10" fill="#94A3B8">Stored securely in browser IndexedDB (<tspan fill="#F59E0B">verishield-device-keys</tspan>)</text>
+      </g>
+
+      <g transform="translate(16, 112)">
+        <rect x="0" y="0" width="378" height="48" rx="6" fill="#2A1B08" stroke="#78350F" stroke-width="1"/>
+        <text x="12" y="18" font-size="10" font-weight="700" fill="#FBBF24">PUBLIC KEY (SPKI DER Base64)</text>
+        <text x="12" y="32" font-size="10" fill="#94A3B8">Pre-provisioned in HQ DB registry during device enrollment</text>
+      </g>
+    </g>
+
+    <!-- Card 3.2: Enrollment Client -->
+    <g transform="translate(20, 255)">
+      <rect x="0" y="0" width="410" height="150" rx="10" fill="#191004" stroke="#D97706" stroke-width="1"/>
+      <text x="16" y="26" font-size="13" font-weight="800" fill="#FFFFFF">Enrollment &amp; Binding Client</text>
+      <text x="16" y="44" font-size="11" fill="#94A3B8">Controlled one-time device binding protocol</text>
+      
+      <g transform="translate(16, 58)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0">• Validates one-time enrollment code (e.g. VS-ENROLL-DEMO-01)</text>
+        <text x="0" y="16">• Generates Proof-of-Possession ECDSA Signature</text>
+        <text x="0" y="32">• Binds device ID to specific checkpoint &amp; officer badge</text>
+        <text x="0" y="48" font-weight="700" fill="#FBBF24">• Consumes enrollment code (One-Time Use)</text>
+      </g>
+    </g>
+
+    <!-- Card 3.3: Local Ledger Store -->
+    <g transform="translate(20, 420)">
+      <rect x="0" y="0" width="410" height="205" rx="10" fill="#191004" stroke="#D97706" stroke-width="1"/>
+      <text x="16" y="26" font-size="13" font-weight="800" fill="#FFFFFF">On-Device Local Ledger</text>
+      <text x="16" y="44" font-size="11" fill="#94A3B8">IndexedDB / LocalStorage Session Store</text>
+
+      <g transform="translate(16, 58)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0" font-weight="700" fill="#38BDF8">STORED LOCAL SESSION RECORD CONTAINS:</text>
+        <text x="0" y="20">• Session ID &amp; Timestamps</text>
+        <text x="0" y="36">• Masked Identity Fields (e.g., XXXX-XXXX-1234)</text>
+        <text x="0" y="52">• Checksum &amp; Verification Signal Results</text>
+        <text x="0" y="68">• ELA Tamper &amp; Face Similarity Scores</text>
+        <text x="0" y="84">• Composite Risk Score &amp; Advisory Band</text>
+        <text x="0" y="100">• Officer Final Decision &amp; Audit Notes</text>
+        <text x="0" y="116" font-weight="700" fill="#EF4444">❌ RAW SCANS &amp; UNMASKED PII ARE NEVER STORED</text>
+      </g>
+    </g>
+
+    <!-- Card 3.4: Off-Thread Sync Coordinator -->
+    <g transform="translate(20, 640)">
+      <rect x="0" y="0" width="410" height="225" rx="10" fill="#2A1B08" stroke="#F59E0B" stroke-width="1.5" filter="url(#glowAmber)"/>
+      <text x="16" y="26" font-size="14" font-weight="800" fill="#FFFFFF">Sync Coordinator Engine</text>
+      <text x="16" y="44" font-size="11" font-weight="600" fill="#FBBF24">Asynchronous Push Manager</text>
+
+      <g transform="translate(16, 60)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0">• Queues pending sessions when decision is recorded</text>
+        <text x="0" y="16">• Generates cryptographic request signature headers:</text>
+        <text x="12" y="32" font-family="monospace" fill="#FDE68A">X-VeriShield-Device: DEV-OFFICER-01</text>
+        <text x="12" y="46" font-family="monospace" fill="#FDE68A">X-VeriShield-Timestamp: &lt;unix_ts&gt;</text>
+        <text x="12" y="60" font-family="monospace" fill="#FDE68A">X-VeriShield-Nonce: &lt;random_nonce&gt;</text>
+        <text x="12" y="74" font-family="monospace" fill="#FDE68A">X-VeriShield-Signature: &lt;ecdsa_p256_b64&gt;</text>
+        <text x="0" y="96">• Non-blocking background sync over HTTPS</text>
+        <text x="0" y="112" font-weight="700" fill="#34D399">• Automatic retry &amp; individual session sync recovery</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- CONNECTIVITY & TRUST BOUNDARY (VERTICAL DIVIDER) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(1415, 120)">
+    <!-- Dashed Divider Line -->
+    <line x1="25" y1="0" x2="25" y2="890" stroke="#F59E0B" stroke-width="2.5" stroke-dasharray="8,6" filter="url(#glowAmber)"/>
+    
+    <!-- Sync Pillar Badge -->
+    <g transform="translate(25, 420)">
+      <rect x="-85" y="-30" width="170" height="60" rx="30" fill="#090D16" stroke="#F59E0B" stroke-width="2"/>
+      <text x="0" y="-8" font-size="11" font-weight="800" fill="#FBBF24" text-anchor="middle">⚡ SYNC BOUNDARY</text>
+      <text x="0" y="8" font-size="9" font-weight="600" fill="#94A3B8" text-anchor="middle">INTERMITTENT</text>
+      <text x="0" y="20" font-size="9" font-weight="600" fill="#94A3B8" text-anchor="middle">CONNECTIVITY</text>
+    </g>
+  </g>
+
+  <!-- Connection: Sync Coordinator -> HQ Sync API -->
+  <path d="M 1380 750 L 1485 750" stroke="#F59E0B" stroke-width="3" marker-end="url(#arrowGreen)"/>
+
+  <!-- ========================================================================= -->
+  <!-- ZONE 04: HQ CONNECTED VERIFICATION & AUDIT -->
+  <!-- ========================================================================= -->
+  <g transform="translate(1480, 120)">
+    <!-- Zone Container Box -->
+    <rect x="0" y="0" width="390" height="890" rx="16" fill="url(#cardGradHQ)" stroke="#10B981" stroke-width="1.5" filter="url(#shadow)"/>
+    
+    <!-- Zone Header -->
+    <rect x="0" y="0" width="390" height="50" rx="16" fill="#064E3B"/>
+    <rect x="0" y="34" width="390" height="16" fill="#064E3B"/>
+    <circle cx="24" cy="25" r="7" fill="#34D399"/>
+    <text x="40" y="30" font-size="14" font-weight="800" fill="#FFFFFF" letter-spacing="0.5">04 | HQ VERIFICATION &amp; AUDIT</text>
+
+    <!-- Card 4.1: HQ APIs -->
+    <g transform="translate(16, 65)">
+      <rect x="0" y="0" width="358" height="240" rx="10" fill="#031A11" stroke="#10B981" stroke-width="1.5"/>
+      <text x="16" y="26" font-size="14" font-weight="800" fill="#FFFFFF">HQ Application Gateways</text>
+      <text x="16" y="44" font-size="11" font-weight="600" fill="#34D399">FastAPI Backend Service Cluster</text>
+
+      <!-- Sync API Endpoint Box -->
+      <g transform="translate(12, 56)">
+        <rect x="0" y="0" width="334" height="60" rx="6" fill="#062E1E" stroke="#059669" stroke-width="1"/>
+        <text x="12" y="18" font-size="11" font-weight="800" fill="#34D399">POST /sync/session</text>
+        <text x="12" y="34" font-size="10" fill="#CBD5E1">• ECDSA P-256 Signature Verification</text>
+        <text x="12" y="48" font-size="10" fill="#CBD5E1">• Nonce Replay Check • Officer/Device Binding</text>
+      </g>
+
+      <!-- Enrollment API Endpoint Box -->
+      <g transform="translate(12, 122)">
+        <rect x="0" y="0" width="334" height="48" rx="6" fill="#062E1E" stroke="#059669" stroke-width="1"/>
+        <text x="12" y="18" font-size="11" font-weight="800" fill="#34D399">POST /device/enroll</text>
+        <text x="12" y="34" font-size="10" fill="#CBD5E1">• One-Time Code Hash Verification &amp; Binding</text>
+      </g>
+
+      <!-- Admin API Endpoint Box -->
+      <g transform="translate(12, 176)">
+        <rect x="0" y="0" width="334" height="48" rx="6" fill="#062E1E" stroke="#059669" stroke-width="1"/>
+        <text x="12" y="18" font-size="11" font-weight="800" fill="#34D399">GET /admin/* APIs</text>
+        <text x="12" y="34" font-size="10" fill="#CBD5E1">• Passcode Auth, Case Review, Analytics</text>
+      </g>
+    </g>
+
+    <!-- Card 4.2: HQ Database Ledger -->
+    <g transform="translate(16, 320)">
+      <rect x="0" y="0" width="358" height="150" rx="10" fill="#031A11" stroke="#059669" stroke-width="1"/>
+      <text x="16" y="26" font-size="13" font-weight="800" fill="#FFFFFF">HQ Central Database Ledger</text>
+      <text x="16" y="44" font-size="11" fill="#94A3B8">SQLAlchemy (SQLite Field / PostgreSQL HQ)</text>
+
+      <g transform="translate(16, 58)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0" font-weight="600" fill="#34D399">• VerificationSession (PK: session_id)</text>
+        <text x="0" y="16" font-weight="600" fill="#34D399">• RegisteredDevice (ECDSA Public Keys)</text>
+        <text x="0" y="32" font-weight="600" fill="#34D399">• DeviceEnrollment (One-time hashes)</text>
+        <text x="0" y="48" font-weight="600" fill="#34D399">• Officer &amp; Checkpoint Registries</text>
+        <text x="0" y="68" font-weight="700" fill="#34D399">✓ Atomic Multi-Table Commit Transactions</text>
+      </g>
+    </g>
+
+    <!-- Card 4.3: Tamper-Evident Audit Chain -->
+    <g transform="translate(16, 485)">
+      <rect x="0" y="0" width="358" height="205" rx="10" fill="#031A11" stroke="#10B981" stroke-width="1.5"/>
+      <text x="16" y="26" font-size="14" font-weight="800" fill="#FFFFFF">Cryptographic Audit Chain</text>
+      <text x="16" y="44" font-size="11" font-weight="600" fill="#34D399">SHA-256 Linked Audit Hash Log</text>
+
+      <!-- Hash Link Diagram -->
+      <g transform="translate(16, 58)">
+        <rect x="0" y="0" width="326" height="60" rx="6" fill="#062E1E" stroke="#059669" stroke-width="1"/>
+        <text x="12" y="18" font-size="10" font-family="monospace" fill="#A7F3D0">event_hash = SHA256(session_id |</text>
+        <text x="12" y="32" font-family="monospace" fill="#A7F3D0">  action | actor | detail | ts | prev_hash)</text>
+        <text x="12" y="48" font-size="9" fill="#34D399">Sequential cryptographic linkage</text>
+      </g>
+
+      <g transform="translate(16, 128)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0">• Automatic log on SYNC_ACCEPTED &amp; events</text>
+        <text x="0" y="16">• On-demand verification: <tspan fill="#34D399">GET /admin/audit/verify</tspan></text>
+        <text x="0" y="32">• Detects database tampering or retroactive edits</text>
+        <text x="0" y="48" font-weight="700" fill="#34D399">✓ 100% TAMPER-EVIDENT INTEGRITY</text>
+      </g>
+    </g>
+
+    <!-- Card 4.4: HQ Admin Dashboard Actor -->
+    <g transform="translate(16, 705)">
+      <rect x="0" y="0" width="358" height="165" rx="10" fill="#031A11" stroke="#059669" stroke-width="1"/>
+      
+      <circle cx="40" cy="40" r="18" fill="#047857" stroke="#34D399" stroke-width="1.5"/>
+      <path d="M 40 30 C 35 30 31 34 31 39 C 31 44 35 48 40 48 C 45 48 49 44 49 39 C 49 34 45 30 40 30 Z M 28 55 C 24 55 22 59 22 62 V 64 H 58 V 64 C 58 59 56 55 52 55 Z" fill="#FFFFFF"/>
+
+      <text x="70" y="36" font-size="14" font-weight="800" fill="#FFFFFF">HQ Admin Console</text>
+      <text x="70" y="52" font-size="11" fill="#34D399">Central Command &amp; Oversight</text>
+
+      <g transform="translate(16, 75)" font-size="10" fill="#CBD5E1">
+        <text x="0" y="0">• Live Operational Analytics &amp; Statistics</text>
+        <text x="0" y="16">• Secondary Case Review Workflow (OPEN/CLOSED)</text>
+        <text x="0" y="32">• Audit Log Hash Verification Inspector</text>
+        <text x="0" y="48" font-weight="700" fill="#34D399">• Multi-Checkpoint Central Governance</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Flow Arrows within Zone 4 -->
+  <path d="M 1670 305 L 1670 320" stroke="#10B981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <path d="M 1670 470 L 1670 485" stroke="#10B981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================================================= -->
+  <line x1="50" y1="1035" x2="1870" y2="1035" stroke="#1E293B" stroke-width="1.5"/>
+  <g transform="translate(50, 1060)" font-size="11" font-weight="600" fill="#64748B">
+    <text x="0" y="0">VERISHIELD AI ARCHITECTURE SPECIFICATION • SMART INDIA HACKATHON (SIH) 2026 TECHNICAL SUBMISSION</text>
+    <text x="1820" y="0" text-anchor="end" font-weight="700" fill="#38BDF8">CORE PRINCIPLE: VERIFY LOCALLY → TRUST LOCALLY → SYNC SECURELY → AUDIT CENTRALLY</text>
+  </g>
+</svg>

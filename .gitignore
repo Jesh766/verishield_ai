@@ -57,3 +57,4 @@ backend/.env.*
 frontend_test_output.txt
 playwright-report/
 test-results/
+scratch/
