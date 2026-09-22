@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CasesRouteImport } from './routes/cases'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as SessionIdRouteImport } from './routes/session.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -24,9 +26,19 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CasesRoute = CasesRouteImport.update({
+  id: '/cases',
+  path: '/cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntelligenceRoute = IntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SessionIdRoute = SessionIdRouteImport.update({
@@ -38,34 +50,50 @@ const SessionIdRoute = SessionIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/cases': typeof CasesRoute
   '/history': typeof HistoryRoute
+  '/intelligence': typeof IntelligenceRoute
   '/session/$id': typeof SessionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/cases': typeof CasesRoute
   '/history': typeof HistoryRoute
+  '/intelligence': typeof IntelligenceRoute
   '/session/$id': typeof SessionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/cases': typeof CasesRoute
   '/history': typeof HistoryRoute
+  '/intelligence': typeof IntelligenceRoute
   '/session/$id': typeof SessionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/history' | '/session/$id'
+  fullPaths:
+    '/' | '/admin' | '/cases' | '/history' | '/intelligence' | '/session/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/history' | '/session/$id'
-  id: '__root__' | '/' | '/admin' | '/history' | '/session/$id'
+  to: '/' | '/admin' | '/cases' | '/history' | '/intelligence' | '/session/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/cases'
+    | '/history'
+    | '/intelligence'
+    | '/session/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  CasesRoute: typeof CasesRoute
   HistoryRoute: typeof HistoryRoute
+  IntelligenceRoute: typeof IntelligenceRoute
   SessionIdRoute: typeof SessionIdRoute
 }
 
@@ -85,11 +113,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cases': {
+      id: '/cases'
+      path: '/cases'
+      fullPath: '/cases'
+      preLoaderRoute: typeof CasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history': {
       id: '/history'
       path: '/history'
       fullPath: '/history'
       preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence': {
+      id: '/intelligence'
+      path: '/intelligence'
+      fullPath: '/intelligence'
+      preLoaderRoute: typeof IntelligenceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/session/$id': {
@@ -105,7 +147,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  CasesRoute: CasesRoute,
   HistoryRoute: HistoryRoute,
+  IntelligenceRoute: IntelligenceRoute,
   SessionIdRoute: SessionIdRoute,
 }
 export const routeTree = rootRouteImport

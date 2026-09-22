@@ -57,8 +57,11 @@ def test_health(client):
 def test_capabilities_is_honest_about_unbuilt_parts(client):
     body = client.get("/capabilities").json()
     names = {c["name"]: c for c in body["components"]}
-    # Face match is planned (not implemented); accept either label
-    assert names["Face match"]["status"] in ("not implemented", "planned")
+    face = names["Advisory face similarity"]
+    assert face["status"] == "live"
+    assert face["is_ai"] is True
+    assert "Not authentication" in face["detail"]
+    assert names["Authoritative verification gateway"]["status"] == "integration_ready"
     assert names["Aadhaar Verhoeff checksum"]["is_ai"] is False
     assert names["OCR text recognition"]["is_ai"] is True
 

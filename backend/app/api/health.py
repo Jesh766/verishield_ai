@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter
 
 from .. import config
-from ..services import ocr
+from ..services import authoritative, ocr
 
 router = APIRouter(tags=["system"])
 
@@ -202,8 +202,28 @@ def capabilities():
                 "is_ai": False,
                 "detail": "SHA-256 hash chain. Not blockchain.",
             },
-            {"name": "Face match", "status": "planned", "phase": "production", "is_ai": True},
-            {"name": "Real ELA image tamper detection", "status": "planned", "phase": "production", "is_ai": False},
+            {
+                "name": "Advisory face similarity",
+                "status": "live",
+                "kind": "heuristic",
+                "is_ai": True,
+                "detail": "Client-side skin-chroma localization and HOG/texture comparison. Not authentication.",
+            },
+            {
+                "name": "Document integrity analysis",
+                "status": "live",
+                "kind": "heuristic",
+                "is_ai": False,
+                "detail": "Client-side ELA/recompression heuristic. Advisory only and not document authentication.",
+            },
+            {
+                "name": "Authoritative verification gateway",
+                "status": "integration_ready",
+                "kind": "provider abstraction",
+                "is_ai": False,
+                "provider_status": authoritative.check_authoritative_verification("unknown", {}).get("status"),
+                "detail": "No government provider is connected in this deployment.",
+            },
         ],
         "note": "Decision-support triage tool. The officer makes the final call.",
         "deployment_tier": "SIH Prototype (Tier A)",

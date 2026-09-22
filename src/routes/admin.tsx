@@ -100,7 +100,7 @@ function computeLocalStats(localSessions: StoredSession[]): {
     const band = s.risk.band;
     by_band[band] = (by_band[band] || 0) + 1;
 
-    const cp = "Checkpoint Alpha";
+    const cp = "Local device context";
     by_checkpoint[cp] = (by_checkpoint[cp] || 0) + 1;
 
     const dt = s.documentType;
@@ -573,6 +573,18 @@ function AdminPage() {
             className="text-xs font-mono font-semibold text-primary hover:underline px-2 py-1 bg-surface-container rounded border border-outline-variant"
           >
             ← Officer Workstation
+          </Link>
+          <Link
+            to="/cases"
+            className="text-xs font-mono font-semibold text-primary hover:underline px-2 py-1 bg-surface-container rounded border border-outline-variant"
+          >
+            Cases
+          </Link>
+          <Link
+            to="/intelligence"
+            className="text-xs font-mono font-semibold text-primary hover:underline px-2 py-1 bg-surface-container rounded border border-outline-variant"
+          >
+            Intelligence
           </Link>
           <button
             onClick={() => {

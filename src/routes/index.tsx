@@ -19,7 +19,12 @@ import {
 import { scoreRisk } from "@/lib/engine/risk";
 import { validateUploadFile } from "@/lib/file-validation";
 import { LanguageSelector } from "@/lib/i18n";
-import { createNetworkMonitor, createSyncTracker, type NetworkState, type SyncStatus } from "@/lib/network";
+import {
+  createNetworkMonitor,
+  createSyncTracker,
+  type NetworkState,
+  type SyncStatus,
+} from "@/lib/network";
 import { pushPendingSessions } from "@/lib/sync";
 import {
   DOC_LABEL,
@@ -338,6 +343,24 @@ function OfficerScreen() {
             >
               <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
                 admin_panel_settings
+              </span>
+            </Link>
+            <Link
+              to="/cases"
+              title="Case investigations"
+              className="h-8 px-2 flex items-center text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
+                folder_open
+              </span>
+            </Link>
+            <Link
+              to="/intelligence"
+              title="Fraud intelligence"
+              className="h-8 px-2 flex items-center text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
+                query_stats
               </span>
             </Link>
 
